@@ -1,0 +1,85 @@
+<game_constant>
+	name:zoom_rate
+	value:0.1
+</game_constant>
+
+<game_constant>
+	name:zoom_min
+	value:0.5
+</game_constant>
+
+<game_constant>
+	name:zoom_max
+	value:2.0
+</game_constant>
+
+<game_constant>
+	// m/s
+	name:speed_of_light
+	value:299792458.0
+</game_constant>
+
+<game_constant>
+	// m^3 kg^-1 s^-2
+	name:gravity
+	value:0.0000000000667384
+</game_constant>
+
+<game_constant>
+	// kg
+	name:solar_mass
+	value:1988550000000000000000000000000.0
+</game_constant>
+
+<game_constant>
+	// kg/m^3
+	name:solar_density
+	value:1408.0
+</game_constant>
+
+<game_constant>
+	// kg
+	name:earth_mass
+	value:5972000000000000000000000.0
+</game_constant>
+
+<game_constant>
+	// kg/m^3
+	name:earth_density
+	value:5515.0
+</game_constant>
+
+<game_constant>
+	// kg
+	name:moon_mass
+	value:73477000000000000000000.0
+</game_constant>
+
+<game_constant>
+	// kg/m^3
+	name:moon_density
+	value:3346.4
+</game_constant>
+
+<game_constant>
+	// kg/m^3
+	name:ship_density
+	value:0.750425127
+</game_constant>
+
+<game_constant>
+	// kg
+	name:human_mass
+	value:60.0
+</game_constant>
+
+<game_constant>
+	// kg/m^3
+	name:human_density
+	value:1062.0
+</game_constant>
+
+<game_constant>
+	name:ships
+	value:1
+</game_constant>

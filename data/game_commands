@@ -1,0 +1,49 @@
+<game_command>
+	name:pause
+	title:Pause
+	description:Pause the game
+	developer:false
+	key:Pause
+	controller_button:back
+	controller_axis:
+</game_command>
+
+<game_command>
+	name:up
+	title:Up
+	description:Move up
+	developer:false
+	key:Up
+	controller_button:dpup
+	controller_axis:
+</game_command>
+
+<game_command>
+	name:down
+	title:Down
+	description:Move down
+	developer:false
+	key:Down
+	controller_button:dpdown
+	controller_axis:
+</game_command>
+
+<game_command>
+	name:left
+	title:Left
+	description:Move left
+	developer:false
+	key:Left
+	controller_button:dpleft
+	controller_axis:
+</game_command>
+
+<game_command>
+	name:right
+	title:Right
+	description:Move right
+	developer:false
+	key:Right
+	controller_button:dpright
+	controller_axis:
+</game_command>
