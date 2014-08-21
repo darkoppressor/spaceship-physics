@@ -22,6 +22,8 @@
 #include "game_constants.h"
 #include "sprite.h"
 
+#include "ship_type.h"
+
 #include <string>
 
 class Version_Series{
@@ -85,6 +87,8 @@ public:
     std::vector<Color_Theme> color_themes;
     std::vector<Animation> animations;
     std::vector<Window> windows;
+
+    std::vector<Ship_Type> ship_types;
 
     Tooltip tooltip;
 
@@ -312,6 +316,9 @@ public:
     Window* get_window(std::string name);
     Game_Command* get_game_command(std::string name);
     Game_Option* get_game_option(std::string name);
+
+    void load_ship_type(File_IO_Load* load);
+    Ship_Type* get_ship_type(std::string name);
 
     Color_Theme* current_color_theme();
     bool animation_exists(std::string animation_name);

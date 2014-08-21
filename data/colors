@@ -1,6 +1,29 @@
 //** Game Colors **//
 
+<color>
+	name:star_blue
+	rgb:12,242,242
+</color>
 
+<color>
+	name:star_white
+	rgb:230,230,230
+</color>
+
+<color>
+	name:star_yellow
+	rgb:242,242,12
+</color>
+
+<color>
+	name:star_orange
+	rgb:242,128,12
+</color>
+
+<color>
+	name:star_red
+	rgb:242,12,12
+</color>
 
 //** Engine Colors **//
 

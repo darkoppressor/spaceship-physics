@@ -1,0 +1,12 @@
+You are a smuggler in space
+
+You may have weapons equipped, but you can only control whether or not they fire
+Their firing is automated
+
+Two types of travel: FTL (Warp) and regular
+
+Warp requires fuel
+Fuel adds to mass
+
+While warping, collisions are ignored
+Gravity still affects though

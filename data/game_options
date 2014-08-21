@@ -35,6 +35,12 @@
 </game_option>
 
 <game_option>
+	name:cl_background_count
+	default:5
+	description:The number of background layers to render.
+</game_option>
+
+<game_option>
 	name:cl_network_rate_bytes
 	default:10000
 	description:The desired rate for receiving updates from the server in bytes/second.

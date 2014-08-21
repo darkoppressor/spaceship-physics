@@ -27,6 +27,9 @@ string Game_Option::get_value(){
     else if(name=="cl_chat_timestamps"){
         return string_stuff.bool_to_string(game.option_chat_timestamps);
     }
+    else if(name=="cl_background_count"){
+        return string_stuff.num_to_string(game.option_background_count);
+    }
     else if(name=="cl_network_rate_bytes"){
         return string_stuff.num_to_string(network.rate_bytes);
     }
@@ -96,6 +99,9 @@ void Game_Option::set_value(string new_value){
     }
     else if(name=="cl_chat_timestamps"){
         game.option_chat_timestamps=string_stuff.string_to_bool(new_value);
+    }
+    else if(name=="cl_background_count"){
+        game.option_background_count=string_stuff.string_to_unsigned_long(new_value);
     }
     else if(name=="cl_network_rate_bytes"){
         network.rate_bytes=string_stuff.string_to_unsigned_long(new_value);

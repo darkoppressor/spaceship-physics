@@ -9,7 +9,7 @@ void Game::prepare_for_input(){
 
         display_scoreboard=false;
 
-        world.objects[0].reset_thrust_input();
+        world.ships[0].reset_thrust_input();
     }
 }
 
@@ -71,16 +71,19 @@ void Game::handle_input_states(){
     if(in_progress){
         if(!paused){
             if(engine_interface.game_command_state("left")){
-                world.objects[0].thrust_left=true;
+                world.ships[0].thrust_left=true;
             }
             if(engine_interface.game_command_state("up")){
-                world.objects[0].thrust_up=true;
+                world.ships[0].thrust_up=true;
             }
             if(engine_interface.game_command_state("right")){
-                world.objects[0].thrust_right=true;
+                world.ships[0].thrust_right=true;
             }
             if(engine_interface.game_command_state("down")){
-                world.objects[0].thrust_down=true;
+                world.ships[0].thrust_down=true;
+            }
+            if(engine_interface.game_command_state("brake")){
+                world.ships[0].brake=true;
             }
         }
     }

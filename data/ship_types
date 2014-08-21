@@ -1,0 +1,21 @@
+<ship_type>
+	name:0
+	sprite:ship_0
+	health:500.0
+	armor:0.25
+	thrust:15000.0
+	angular_thrust:60000.0
+	stabilizer:30000.0
+	angular_stabilizer:120000.0
+</ship_type>
+
+<ship_type>
+	name:1
+	sprite:ship_1
+	health:1000.0
+	armor:0.5
+	thrust:30000.0
+	angular_thrust:120000.0
+	stabilizer:60000.0
+	angular_stabilizer:240000.0
+</ship_type>

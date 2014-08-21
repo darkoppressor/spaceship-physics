@@ -19,6 +19,7 @@ public:
     bool option_chat_timestamps;
     uint32_t option_max_players;
     bool option_screen_shake;
+    uint32_t option_background_count;
 
     bool display_scoreboard;
 
@@ -83,7 +84,6 @@ public:
 
     void set_camera();
 
-    void render_background();
     void render_scoreboard();
 
     void prepare_for_input();

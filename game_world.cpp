@@ -1,13 +1,18 @@
 #include "game_world.h"
 #include "world.h"
+#include "render.h"
 
 using namespace std;
 
 void Game_World::clear_world(){
-    objects.clear();
+    for(int i=0;i<backgrounds.size();i++){
+        backgrounds[i].unload();
+    }
+    backgrounds.clear();
 
-    collisions.clear();
-    gravitations.clear();
+    ships.clear();
+
+    collisions_ship_on_ship.clear();
 }
 
 void Game_World::generate_world(){
@@ -15,27 +20,32 @@ void Game_World::generate_world(){
 
     clear_world();
 
+    backgrounds.push_back(Background());
+
+    Vector position_player((double)rng.random_range(0,1000000000)*0.000000001*144.0,(double)rng.random_range(0,359));
+    Vector_Components vc_player=position_player.get_components_absolute();
+
+    generate_ship("1",vc_player.a,vc_player.b,Vector(0.0,0.0),0.0,"player");
+
+    for(int i=0;i<10;i++){
+        Vector position((double)rng.random_range(0,1000000000)*0.000000001*144.0,(double)rng.random_range(0,359));
+        Vector_Components vc=position.get_components_absolute();
+
+        generate_ship("1",vc.a,vc.b,Vector(0.0,0.0),0.0,"hostile");
+    }
+
     /**double universe_mass=SOLAR_MASS*1.5;
     double universe_density=(SOLAR_MASS*0.004)/pow(9460528400000000.0,3.0);
     double universe_volume=universe_mass/universe_density;
     double universe_radius=pow(universe_volume*(3.0/(4.0*M_PI)),1.0/3.0);*/
 
-    double universe_mass=9000.0;
+    /**double universe_mass=9000.0;
     double universe_radius=144.0;
 
-    bool player_made=false;
     for(double mass_to_create=universe_mass;mass_to_create>0.0;){
         double mass=0.0;
         double radius=0.0;
         string sprite="";
-
-        uint32_t object_type=rng.random_range(0,1);
-        if(!player_made){
-            player_made=true;
-            object_type=1;
-        }
-        ///
-        object_type=1;
 
         //Star
         if(object_type==0){
@@ -62,51 +72,77 @@ void Game_World::generate_world(){
         Vector position((double)rng.random_range(0,1000000000)*0.000000001*universe_radius,(double)rng.random_range(0,359));
         Vector_Components vc=position.get_components_absolute();
 
-        objects.push_back(Object(mass,Collision_Circ(vc.a,vc.b,radius),0.0,Vector(0.0,0.0),sprite));
+        ships.push_back(Ship(mass,Collision_Circ(vc.a,vc.b,radius),0.0,Vector(0.0,0.0),0.0,sprite));
 
         mass_to_create-=mass;
-    }
+    }*/
+}
 
-    game.center_camera(Collision_Circ(0.0,0.0,0.0));
+void Game_World::generate_ship(string type,double x,double y,Vector velocity,double angular_velocity,string faction){
+    RNG rng;
+
+    Sprite sprite_ship;
+    sprite_ship.set_name(engine_interface.get_ship_type(type)->sprite);
+
+    double radius=sprite_ship.get_width()/2.0;
+    double density=(double)rng.random_range(900,1100)*0.001*SHIP_DENSITY;
+    double volume=(4.0/3.0)*M_PI*pow(radius,3.0);
+    double mass=volume*density;
+
+    ships.push_back(Ship(type,mass,Collision_Circ(x,y,radius),velocity,angular_velocity,faction));
 }
 
 void Game_World::tick(){
 }
 
 void Game_World::ai(){
+    for(uint32_t i=1;i<ships.size();i++){
+        ships[i].ai();
+    }
 }
 
 void Game_World::movement(){
-    for(uint32_t i=0;i<objects.size();i++){
-        objects[i].accelerate();
+    for(uint32_t i=0;i<ships.size();i++){
+        ships[i].accelerate();
     }
 
-    for(uint32_t i=0;i<objects.size();i++){
-        objects[i].movement(i);
+    for(uint32_t i=0;i<ships.size();i++){
+        ships[i].movement(i);
     }
 
-    for(uint32_t i=0;i<gravitations.size();i++){
-        objects[gravitations[i].object1].gravitate(gravitations[i].object2);
+    for(uint32_t i=0;i<collisions_ship_on_ship.size();i++){
+        ships[collisions_ship_on_ship[i].object1].collide_with_ship(collisions_ship_on_ship[i].object2);
     }
-    gravitations.clear();
-
-    for(uint32_t i=0;i<collisions.size();i++){
-        objects[collisions[i].object1].collide(collisions[i].object2);
-    }
-    collisions.clear();
+    collisions_ship_on_ship.clear();
 }
 
 void Game_World::events(){
 }
 
 void Game_World::animate(){
-    for(uint32_t i=0;i<objects.size();i++){
-        objects[i].animate();
+    for(uint32_t i=0;i<ships.size();i++){
+        ships[i].animate();
     }
 }
 
 void Game_World::render(){
-    for(uint32_t i=0;i<objects.size();i++){
-        objects[i].render();
+    for(uint32_t i=0;i<ships.size();i++){
+        ships[i].render();
+    }
+}
+
+void Game_World::update_background(){
+    for(int i=0;i<backgrounds.size();i++){
+        backgrounds[i].update(game.camera_delta_x,game.camera_delta_y);
+    }
+}
+
+void Game_World::render_background(){
+    render_rectangle(0,0,main_window.SCREEN_WIDTH,main_window.SCREEN_HEIGHT,1.0,"ui_black");
+
+    for(int i=0;i<backgrounds.size();i++){
+        if(backgrounds[i].opacity>0.0){
+            backgrounds[i].render();
+        }
     }
 }

@@ -47,3 +47,13 @@
 	controller_button:dpright
 	controller_axis:
 </game_command>
+
+<game_command>
+	name:brake
+	title:Velocity Stabilizer
+	description:Stabilize velocity
+	developer:false
+	key:Right Ctrl
+	controller_button:x
+	controller_axis:
+</game_command>

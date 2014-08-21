@@ -7,12 +7,119 @@
 using namespace std;
 
 void Engine_Interface::load_data_game(){
+    load_data("ship_type");
 }
 
 void Engine_Interface::load_data_script_game(string script,File_IO_Load* load){
+    if(script=="ship_type"){
+        load_ship_type(load);
+    }
 }
 
 void Engine_Interface::unload_data_game(){
+    ship_types.clear();
+}
+
+void Engine_Interface::load_ship_type(File_IO_Load* load){
+    ship_types.push_back(Ship_Type());
+
+    bool multi_line_comment=false;
+
+    while(!load->eof()){
+        string line="";
+
+        string str_name="name:";
+        string str_sprite="sprite:";
+        string str_health="health:";
+        string str_armor="armor:";
+        string str_thrust="thrust:";
+        string str_angular_thrust="angular_thrust:";
+        string str_stabilizer="stabilizer:";
+        string str_angular_stabilizer="angular_stabilizer:";
+
+        load->getline(&line);
+        boost::algorithm::trim(line);
+
+        if(boost::algorithm::contains(line,"*/")){
+            multi_line_comment=false;
+        }
+        if(!multi_line_comment && boost::algorithm::starts_with(line,"/*")){
+            multi_line_comment=true;
+        }
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,"//")){
+        }
+
+        //name
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_name)){
+            line.erase(0,str_name.length());
+
+            ship_types[ship_types.size()-1].name=line;
+        }
+        //sprite
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_sprite)){
+            line.erase(0,str_sprite.length());
+
+            ship_types[ship_types.size()-1].sprite=line;
+        }
+        //health
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_health)){
+            line.erase(0,str_health.length());
+
+            ship_types[ship_types.size()-1].health=string_stuff.string_to_double(line);
+        }
+        //armor
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_armor)){
+            line.erase(0,str_armor.length());
+
+            ship_types[ship_types.size()-1].armor=string_stuff.string_to_double(line);
+        }
+        //thrust
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_thrust)){
+            line.erase(0,str_thrust.length());
+
+            ship_types[ship_types.size()-1].thrust=string_stuff.string_to_double(line);
+        }
+        //angular_thrust
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_angular_thrust)){
+            line.erase(0,str_angular_thrust.length());
+
+            ship_types[ship_types.size()-1].angular_thrust=string_stuff.string_to_double(line);
+        }
+        //stabilizer
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_stabilizer)){
+            line.erase(0,str_stabilizer.length());
+
+            ship_types[ship_types.size()-1].stabilizer=string_stuff.string_to_double(line);
+        }
+        //angular_stabilizer
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_angular_stabilizer)){
+            line.erase(0,str_angular_stabilizer.length());
+
+            ship_types[ship_types.size()-1].angular_stabilizer=string_stuff.string_to_double(line);
+        }
+
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,"</ship_type>")){
+            return;
+        }
+    }
+}
+
+Ship_Type* Engine_Interface::get_ship_type(string name){
+    Ship_Type* ptr_object=0;
+
+    for(int i=0;i<ship_types.size();i++){
+        if(ship_types[i].name==name){
+            ptr_object=&ship_types[i];
+
+            break;
+        }
+    }
+
+    if(ptr_object==0){
+        message_log.add_error("Error accessing ship type '"+name+"'");
+    }
+
+    return ptr_object;
 }
 
 void Engine_Interface::open_window(Window* window){

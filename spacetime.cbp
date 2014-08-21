@@ -267,6 +267,8 @@
 		</Compiler>
 		<Unit filename="animation.cpp" />
 		<Unit filename="animation.h" />
+		<Unit filename="background.cpp" />
+		<Unit filename="background.h" />
 		<Unit filename="button.cpp" />
 		<Unit filename="button.h" />
 		<Unit filename="button_events.cpp" />
@@ -350,6 +352,10 @@
 		<Unit filename="screen_shake.h" />
 		<Unit filename="server.cpp" />
 		<Unit filename="server.h" />
+		<Unit filename="ship.cpp" />
+		<Unit filename="ship.h" />
+		<Unit filename="ship_type.cpp" />
+		<Unit filename="ship_type.h" />
 		<Unit filename="sorting.cpp" />
 		<Unit filename="sorting.h" />
 		<Unit filename="sound.cpp" />

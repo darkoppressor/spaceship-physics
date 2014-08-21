@@ -1,0 +1,7 @@
+<animation>
+	name:ship_1
+	frame_count:4
+	animation_speed:-1
+	frame_width:18
+	end_behavior:continue
+</animation>

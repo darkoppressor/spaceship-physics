@@ -1,7 +1,8 @@
 #ifndef game_world_h
 #define game_world_h
 
-#include "object.h"
+#include "background.h"
+#include "ship.h"
 #include "collision.h"
 
 #include <vector>
@@ -9,13 +10,16 @@
 class Game_World{
 public:
 
-    std::vector<Object> objects;
+    std::vector<Background> backgrounds;
 
-    std::vector<Collision> collisions;
-    std::vector<Collision> gravitations;
+    std::vector<Ship> ships;
+
+    std::vector<Collision> collisions_ship_on_ship;
 
     void clear_world();
     void generate_world();
+
+    void generate_ship(std::string type,double x,double y,Vector velocity,double angular_velocity,std::string faction);
 
     void tick();
     void ai();
@@ -23,6 +27,9 @@ public:
     void events();
     void animate();
     void render();
+
+    void update_background();
+    void render_background();
 };
 
 #endif

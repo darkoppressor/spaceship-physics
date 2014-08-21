@@ -13,23 +13,28 @@ public:
     double angle;
 
     Vector velocity;
+    double angular_velocity;
     Vector net_force;
+    double net_angular_force;
+    Vector acceleration;
+    double angular_acceleration;
 
-    bool thrust_left;
-    bool thrust_up;
-    bool thrust_right;
-    bool thrust_down;
+    double health;
 
     Sprite sprite;
 
-    Object(double get_mass,Collision_Circ get_circle,double get_angle,Vector get_velocity,std::string get_sprite);
+    void setup(double get_mass,Collision_Circ get_circle,Vector get_velocity,double get_angular_velocity,double get_health,std::string get_sprite);
 
-    void reset_thrust_input();
+    double get_volume();
+    double get_density();
 
-    void apply_thrust();
+    Vector get_momentum();
+    double get_angular_momentum();
+
+    bool is_alive();
+
     void accelerate();
     void movement(uint32_t index);
-    void collide(uint32_t index);
     void gravitate(uint32_t index);
 
     void animate();

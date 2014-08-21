@@ -12,6 +12,7 @@ Game::Game(){
     option_chat_timestamps=false;
     option_max_players=0;
     option_screen_shake=false;
+    option_background_count=0;
 
     display_scoreboard=false;
 
@@ -241,7 +242,7 @@ void Game::set_camera(){
     }
 
     if(true){
-        center_camera(world.objects[0].circle);
+        center_camera(world.ships[0].circle);
     }
     else{
         if(cam_state=="left"){
@@ -281,10 +282,6 @@ void Game::set_camera(){
 
     camera_delta_x=camera.x-camera_delta_x;
     camera_delta_y=camera.y-camera_delta_y;
-}
-
-void Game::render_background(){
-    render_rectangle(0,0,main_window.SCREEN_WIDTH,main_window.SCREEN_HEIGHT,1.0,"ui_black");
 }
 
 void Game::render_scoreboard(){
