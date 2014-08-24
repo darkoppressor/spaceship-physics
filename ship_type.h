@@ -8,6 +8,7 @@ public:
 
     std::string name;
     std::string sprite;
+    std::string sprite_moving;
 
     double health;
     double armor;

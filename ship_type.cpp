@@ -5,6 +5,7 @@ using namespace std;
 Ship_Type::Ship_Type(){
     name="";
     sprite="";
+    sprite_moving="";
 
     health=0.0;
     armor=0.0;

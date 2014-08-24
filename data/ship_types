@@ -1,6 +1,7 @@
 <ship_type>
 	name:0
 	sprite:ship_0
+	sprite_moving:ship_moving_0
 	health:500.0
 	armor:0.25
 	thrust:15000.0
@@ -12,6 +13,7 @@
 <ship_type>
 	name:1
 	sprite:ship_1
+	sprite_moving:ship_moving_1
 	health:1000.0
 	armor:0.5
 	thrust:30000.0

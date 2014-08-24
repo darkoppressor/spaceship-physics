@@ -4,8 +4,8 @@
 	name:spacetime
 	home_directory:spacetime
 	developer:Kevin Wells
-	logical_screen_width:256
-	logical_screen_height:144
+	logical_screen_width:1280
+	logical_screen_height:720
 	resolution_mode:scaling
 	logic_update_rate:60.0
 	frame_rate_max:200.0

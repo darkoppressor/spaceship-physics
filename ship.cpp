@@ -6,7 +6,7 @@ using namespace std;
 Ship::Ship(string get_type,double get_mass,Collision_Circ get_circle,Vector get_velocity,double get_angular_velocity,string get_faction){
     type=get_type;
 
-    Object::setup(get_mass,get_circle,get_velocity,get_angular_velocity,get_health_max(),engine_interface.get_ship_type(type)->sprite);
+    Object::setup(get_mass,get_circle,get_velocity,get_angular_velocity,get_health_max(),engine_interface.get_ship_type(type)->sprite,engine_interface.get_ship_type(type)->sprite_moving);
 
     reset_thrust_input();
 
@@ -291,4 +291,19 @@ void Ship::take_damage(Vector damage_force){
             armor=0.01;
         }
     }
+}
+
+void Ship::animate(){
+    if(thrust_left || thrust_up || thrust_right || thrust_down || brake){
+        Object::animate();
+    }
+}
+
+void Ship::render(){
+    Sprite* ptr_sprite=&sprite;
+    if(thrust_left || thrust_up || thrust_right || thrust_down || brake){
+        ptr_sprite=&sprite_moving;
+    }
+
+    Object::render(ptr_sprite);
 }

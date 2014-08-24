@@ -30,6 +30,7 @@ void Engine_Interface::load_ship_type(File_IO_Load* load){
 
         string str_name="name:";
         string str_sprite="sprite:";
+        string str_sprite_moving="sprite_moving:";
         string str_health="health:";
         string str_armor="armor:";
         string str_thrust="thrust:";
@@ -60,6 +61,12 @@ void Engine_Interface::load_ship_type(File_IO_Load* load){
             line.erase(0,str_sprite.length());
 
             ship_types[ship_types.size()-1].sprite=line;
+        }
+        //sprite_moving
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_sprite_moving)){
+            line.erase(0,str_sprite_moving.length());
+
+            ship_types[ship_types.size()-1].sprite_moving=line;
         }
         //health
         else if(!multi_line_comment && boost::algorithm::starts_with(line,str_health)){

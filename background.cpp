@@ -21,12 +21,10 @@ void Background_Layer::generate_texture_background(int layer_number){
     layer_image.w=width;
     layer_image.h=height;
 
-    SDL_Surface* surface=0;
-
     Uint32 rmask,gmask,bmask,amask;
     engine_interface.get_rgba_masks(&rmask,&gmask,&bmask,&amask);
 
-    surface=SDL_CreateRGBSurface(SDL_SWSURFACE,width,height,32,rmask,gmask,bmask,amask);
+    SDL_Surface* surface=SDL_CreateRGBSurface(SDL_SWSURFACE,width,height,32,rmask,gmask,bmask,amask);
 
     if(SDL_MUSTLOCK(surface)){
         SDL_LockSurface(surface);

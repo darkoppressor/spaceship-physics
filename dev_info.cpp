@@ -30,16 +30,6 @@ void Engine_Interface::render_dev_info(){
         msg+="Angular Acceleration: "+string_stuff.num_to_string(game.world.ships[0].angular_acceleration)+" degrees/s"+string(1,(unsigned char)253)+"\n";
         msg+="Hull: "+string_stuff.num_to_string(game.world.ships[0].health)+"/"+string_stuff.num_to_string(game.world.ships[0].get_health_max())+"\n";
         msg+="Armor: "+string_stuff.num_to_string(game.world.ships[0].armor)+"/"+string_stuff.num_to_string(game.world.ships[0].get_armor_max())+"\n";
-
-        double angle_differential=330.0-45.0;
-        if(angle_differential>180.0){
-            angle_differential-=360.0;
-        }
-        else if(angle_differential<180.0){
-            angle_differential+=360.0;
-        }
-        msg+="\n";
-        msg+="lol: "+string_stuff.num_to_string(angle_differential)+"\n";
     }
 
     if(msg.length()>0){

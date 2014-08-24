@@ -1,7 +1,15 @@
 <animation>
-	name:ship_1
+	name:ship_moving_0
 	frame_count:4
-	animation_speed:-1
+	animation_speed:50
+	frame_width:18
+	end_behavior:continue
+</animation>
+
+<animation>
+	name:ship_moving_1
+	frame_count:4
+	animation_speed:50
 	frame_width:18
 	end_behavior:continue
 </animation>

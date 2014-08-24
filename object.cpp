@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void Object::setup(double get_mass,Collision_Circ get_circle,Vector get_velocity,double get_angular_velocity,double get_health,string get_sprite){
+void Object::setup(double get_mass,Collision_Circ get_circle,Vector get_velocity,double get_angular_velocity,double get_health,string get_sprite,string get_sprite_moving){
     mass=get_mass;
     circle=get_circle;
 
@@ -17,6 +17,7 @@ void Object::setup(double get_mass,Collision_Circ get_circle,Vector get_velocity
     health=get_health;
 
     sprite.set_name(get_sprite);
+    sprite_moving.set_name(get_sprite_moving);
 }
 
 double Object::get_volume(){
@@ -79,20 +80,15 @@ void Object::gravitate(uint32_t index){
 void Object::animate(){
     if(is_alive()){
         if(collision_check_circ_rect(circle*game.camera_zoom,game.camera)){
-            int animation_speed=200;
-            if(abs(velocity.magnitude)>0.0){
-                animation_speed=(int)ceil((double)animation_speed/abs(velocity.magnitude));
-            }
-
-            sprite.animate(animation_speed);
+            sprite_moving.animate();
         }
     }
 }
 
-void Object::render(){
+void Object::render(Sprite* ptr_sprite){
     if(is_alive()){
         if(collision_check_circ_rect(circle*game.camera_zoom,game.camera)){
-            sprite.render((circle.x-circle.r)*game.camera_zoom-game.camera.x,(circle.y-circle.r)*game.camera_zoom-game.camera.y,1.0,game.camera_zoom,game.camera_zoom,angle);
+            ptr_sprite->render((circle.x-circle.r)*game.camera_zoom-game.camera.x,(circle.y-circle.r)*game.camera_zoom-game.camera.y,1.0,game.camera_zoom,game.camera_zoom,angle);
 
             ///render_circle(circle.x*game.camera_zoom-game.camera.x,circle.y*game.camera_zoom-game.camera.y,circle.r*game.camera_zoom,0.5,"red");
         }

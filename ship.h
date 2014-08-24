@@ -37,6 +37,9 @@ public:
     void collide_with_ship(uint32_t index);
 
     void take_damage(Vector damage_force);
+
+    void animate();
+    void render();
 };
 
 #endif

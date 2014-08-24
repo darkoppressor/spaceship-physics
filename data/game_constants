@@ -15,7 +15,7 @@
 
 <game_constant>
 	name:max_background_star_size
-	value:1
+	value:2
 </game_constant>
 
 <game_constant>
