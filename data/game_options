@@ -1,6 +1,6 @@
 <game_option>
 	name:cl_effect_limit
-	default:1000
+	default:1024
 	description:The maximum number of simultaneous effects.
 </game_option>
 
@@ -36,7 +36,7 @@
 
 <game_option>
 	name:cl_background_count
-	default:5
+	default:16
 	description:The number of background layers to render.
 </game_option>
 

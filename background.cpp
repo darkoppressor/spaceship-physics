@@ -44,19 +44,7 @@ void Background_Layer::generate_texture_background(int layer_number){
 
     //Create the stars:
 
-    //The number of star attempts to make.
-    int base_stars=50;
-    int multiplier_stars=10;
-
-    int max_star_attempts=base_stars-layer_number*multiplier_stars;
-
-    int star_size=game.option_background_count-(int)ceil((double)layer_number*2.0);
-    if(star_size>MAX_BACKGROUND_STAR_SIZE){
-        star_size=MAX_BACKGROUND_STAR_SIZE;
-    }
-    if(star_size<1){
-        star_size=1;
-    }
+    int max_star_attempts=(int)ceil((width*height)/sqrt(((width+height)*1536.0)*(1.0+pow((double)layer_number,4.0))));
 
     for(int star_attempts=0;star_attempts<max_star_attempts;star_attempts++){
         //Set the star color.
@@ -81,6 +69,11 @@ void Background_Layer::generate_texture_background(int layer_number){
         }
 
         pixel_color.set_rgb(color->get_red_short(),color->get_green_short(),color->get_blue_short(),255);
+
+        int star_size=game.rng.weighted_random_range(1,layer_number+1,layer_number/8+1);
+        if(star_size>MAX_BACKGROUND_STAR_SIZE){
+            star_size=MAX_BACKGROUND_STAR_SIZE;
+        }
 
         int x=game.rng.random_range(1,surface->w-1-star_size);
         int y=game.rng.random_range(1,surface->h-1-star_size);
@@ -140,8 +133,9 @@ void Background_Layer::render(double opacity){
 Background::Background(){
     opacity=1.0;
 
+    double max_speed=512.0+pow((double)game.option_background_count-1.0,2.0);
     for(int i=0;i<game.option_background_count;i++){
-        background_layers.push_back(Background_Layer(main_window.SCREEN_WIDTH,main_window.SCREEN_HEIGHT,2.0+2.0*(double)i,2.0+2.0*(double)i));
+        background_layers.push_back(Background_Layer(main_window.SCREEN_WIDTH,main_window.SCREEN_HEIGHT,max_speed-pow((double)i,2.0),max_speed-pow((double)i,2.0)));
     }
 
     //Generate the background layer textures.
