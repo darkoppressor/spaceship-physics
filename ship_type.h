@@ -8,7 +8,6 @@ public:
 
     std::string name;
     std::string sprite;
-    std::string sprite_moving;
 
     double health;
     double armor;
@@ -16,6 +15,7 @@ public:
     //N/s
     double thrust;
     double angular_thrust;
+    double brake;
     double stabilizer;
     double angular_stabilizer;
 

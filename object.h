@@ -22,9 +22,8 @@ public:
     double health;
 
     Sprite sprite;
-    Sprite sprite_moving;
 
-    void setup(double get_mass,Collision_Circ get_circle,Vector get_velocity,double get_angular_velocity,double get_health,std::string get_sprite,std::string get_sprite_moving);
+    void setup(double get_mass,Collision_Circ get_circle,Vector get_velocity,double get_angular_velocity,double get_health,std::string get_sprite);
 
     double get_volume();
     double get_density();
@@ -39,7 +38,7 @@ public:
     void gravitate(uint32_t index);
 
     void animate();
-    void render(Sprite* ptr_sprite=0);
+    void render();
 };
 
 #endif

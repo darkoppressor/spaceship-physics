@@ -12,11 +12,13 @@ public:
     bool thrust_up;
     bool thrust_right;
     bool thrust_down;
-    bool brake;
+    bool braking;
 
     double armor;
 
     std::string faction;
+
+    Sprite sprite_thrust;
 
     Ship(std::string get_type,double get_mass,Collision_Circ get_circle,Vector get_velocity,double get_angular_velocity,std::string get_faction);
 
@@ -24,11 +26,13 @@ public:
     double get_armor_max();
     double get_thrust();
     double get_angular_thrust();
+    double get_brake();
     double get_stabilizer();
     double get_angular_stabilizer();
 
     void reset_thrust_input();
 
+    void brake(double stabilizer);
     void apply_thrust();
 
     void ai();

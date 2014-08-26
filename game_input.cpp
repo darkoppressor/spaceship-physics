@@ -83,7 +83,7 @@ void Game::handle_input_states(){
                 world.ships[0].thrust_down=true;
             }
             if(engine_interface.game_command_state("brake")){
-                world.ships[0].brake=true;
+                world.ships[0].braking=true;
             }
         }
     }

@@ -6,13 +6,15 @@ using namespace std;
 Ship::Ship(string get_type,double get_mass,Collision_Circ get_circle,Vector get_velocity,double get_angular_velocity,string get_faction){
     type=get_type;
 
-    Object::setup(get_mass,get_circle,get_velocity,get_angular_velocity,get_health_max(),engine_interface.get_ship_type(type)->sprite,engine_interface.get_ship_type(type)->sprite_moving);
+    Object::setup(get_mass,get_circle,get_velocity,get_angular_velocity,get_health_max(),engine_interface.get_ship_type(type)->sprite);
 
     reset_thrust_input();
 
     armor=get_armor_max();
 
     faction=get_faction;
+
+    sprite_thrust.set_name("thrust");
 }
 
 double Ship::get_health_max(){
@@ -31,6 +33,10 @@ double Ship::get_angular_thrust(){
     return engine_interface.get_ship_type(type)->angular_thrust;
 }
 
+double Ship::get_brake(){
+    return engine_interface.get_ship_type(type)->brake;
+}
+
 double Ship::get_stabilizer(){
     return engine_interface.get_ship_type(type)->stabilizer;
 }
@@ -44,7 +50,18 @@ void Ship::reset_thrust_input(){
     thrust_up=false;
     thrust_right=false;
     thrust_down=false;
-    brake=false;
+    braking=false;
+}
+
+void Ship::brake(double stabilizer){
+    double stabilizer_acceleration=stabilizer/mass;
+
+    if(abs(velocity.magnitude)<stabilizer_acceleration){
+        stabilizer_acceleration=velocity.magnitude;
+        stabilizer=stabilizer_acceleration*mass;
+    }
+
+    net_force+=Vector(stabilizer,velocity.opposite().direction);
 }
 
 void Ship::apply_thrust(){
@@ -60,25 +77,17 @@ void Ship::apply_thrust(){
     if(thrust_down){
         net_force+=Vector(get_thrust()/UPDATE_RATE,angle+180.0);
     }
-    if(brake){
-        double stabilizer=get_stabilizer()/UPDATE_RATE;
 
-        double stabilizer_acceleration=stabilizer/mass;
-
-        if(abs(velocity.magnitude)<stabilizer_acceleration){
-            stabilizer_acceleration=velocity.magnitude;
-            stabilizer=stabilizer_acceleration*mass;
-        }
-
-        net_force+=Vector(stabilizer,velocity.opposite().direction);
+    if(braking){
+        brake(get_brake()/UPDATE_RATE);
     }
 
     reduce_angle(angle);
 
     if(!thrust_right && !thrust_left){
         double angular_stabilizer=get_angular_stabilizer()/UPDATE_RATE;
-        if(brake){
-            angular_stabilizer+=get_stabilizer()/UPDATE_RATE;
+        if(braking){
+            angular_stabilizer+=get_brake()/UPDATE_RATE;
         }
 
         double angular_stabilizer_acceleration=angular_stabilizer/mass;
@@ -92,6 +101,10 @@ void Ship::apply_thrust(){
         }
 
         net_angular_force+=angular_stabilizer;
+    }
+
+    if(!thrust_down && !thrust_up){
+        brake(get_stabilizer()/UPDATE_RATE);
     }
 }
 
@@ -153,7 +166,7 @@ void Ship::ai(){
                 thrust_up=true;
             }
             else{
-                brake=true;
+                braking=true;
             }
         }
     }
@@ -294,16 +307,23 @@ void Ship::take_damage(Vector damage_force){
 }
 
 void Ship::animate(){
-    if(thrust_left || thrust_up || thrust_right || thrust_down || brake){
-        Object::animate();
+    if(is_alive()){
+        if(collision_check_circ_rect(circle*game.camera_zoom,game.camera)){
+            Object::animate();
+
+            sprite_thrust.animate();
+        }
     }
 }
 
 void Ship::render(){
-    Sprite* ptr_sprite=&sprite;
-    if(thrust_left || thrust_up || thrust_right || thrust_down || brake){
-        ptr_sprite=&sprite_moving;
-    }
+    if(is_alive()){
+        if(collision_check_circ_rect(circle*game.camera_zoom,game.camera)){
+            if(thrust_right){
+                ///sprite_thrust.render((circle.x)*game.camera_zoom-game.camera.x,(circle.y-circle.r/2.0-sprite_thrust.get_height())*game.camera_zoom-game.camera.y,1.0,game.camera_zoom,game.camera_zoom,angle);
+            }
 
-    Object::render(ptr_sprite);
+            Object::render();
+        }
+    }
 }

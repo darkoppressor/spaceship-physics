@@ -52,19 +52,19 @@ void Background_Layer::generate_texture_background(int layer_number){
 
         int random=game.rng.random_range(0,99);
 
-        if(random>=0 && random<4){
+        if(random>=0 && random<1){
             color=engine_interface.get_color("star_blue");
         }
-        else if(random>=4 && random<9){
+        else if(random>=1 && random<2){
             color=engine_interface.get_color("star_white");
         }
-        else if(random>=9 && random<17){
+        else if(random>=2 && random<13){
             color=engine_interface.get_color("star_yellow");
         }
-        else if(random>=17 && random<29){
+        else if(random>=13 && random<25){
             color=engine_interface.get_color("star_orange");
         }
-        else if(random>=29 && random<100){
+        else if(random>=25 && random<100){
             color=engine_interface.get_color("star_red");
         }
 
