@@ -57,3 +57,23 @@
 	controller_button:x
 	controller_axis:
 </game_command>
+
+<game_command>
+	name:positional_stabilizer
+	title:Toggle Positional Stabilizer
+	description:Toggle automated positional stabilizer
+	developer:false
+	key:Q
+	controller_button:y
+	controller_axis:
+</game_command>
+
+<game_command>
+	name:angular_stabilizer
+	title:Toggle Angular Stabilizer
+	description:Toggle automated angular stabilizer
+	developer:false
+	key:W
+	controller_button:b
+	controller_axis:
+</game_command>

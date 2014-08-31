@@ -2,6 +2,7 @@
 #define game_world_h
 
 #include "background.h"
+#include "effect_transient.h"
 #include "ship.h"
 #include "collision.h"
 
@@ -11,6 +12,8 @@ class Game_World{
 public:
 
     std::vector<Background> backgrounds;
+
+    std::vector<Effect_Transient> effects_transient;
 
     std::vector<Ship> ships;
 
@@ -30,6 +33,8 @@ public:
 
     void update_background();
     void render_background();
+
+    Ship* get_player();
 };
 
 #endif

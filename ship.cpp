@@ -9,12 +9,24 @@ Ship::Ship(string get_type,double get_mass,Collision_Circ get_circle,Vector get_
     Object::setup(get_mass,get_circle,get_velocity,get_angular_velocity,get_health_max(),engine_interface.get_ship_type(type)->sprite);
 
     reset_thrust_input();
+    reset_stabilizer_input();
+
+    counter_thrust_left=0;
+    counter_thrust_up=0;
+    counter_thrust_right=0;
+    counter_thrust_down=0;
+    counter_stabilize_left=0;
+    counter_stabilize_right=0;
+    counter_stabilize_brake=0;
+    counter_sound_thrust=0;
+    counter_sound_stabilize=0;
+
+    stabilizer_positional=true;
+    stabilizer_angular=true;
 
     armor=get_armor_max();
 
     faction=get_faction;
-
-    sprite_thrust.set_name("thrust");
 }
 
 double Ship::get_health_max(){
@@ -45,12 +57,35 @@ double Ship::get_angular_stabilizer(){
     return engine_interface.get_ship_type(type)->angular_stabilizer;
 }
 
+Coords Ship::get_thruster_up(){
+    return engine_interface.get_ship_type(type)->thruster_up;
+}
+
+Coords Ship::get_thruster_down(){
+    return engine_interface.get_ship_type(type)->thruster_down;
+}
+
+Coords Ship::get_thruster_left(){
+    return engine_interface.get_ship_type(type)->thruster_left;
+}
+
+Coords Ship::get_thruster_right(){
+    return engine_interface.get_ship_type(type)->thruster_right;
+}
+
 void Ship::reset_thrust_input(){
     thrust_left=false;
     thrust_up=false;
     thrust_right=false;
     thrust_down=false;
     braking=false;
+}
+
+void Ship::reset_stabilizer_input(){
+    stabilize_left=false;
+    stabilize_right=false;
+    stabilize_brake=false;
+    stabilize_brake_vector*=0.0;
 }
 
 void Ship::brake(double stabilizer){
@@ -61,10 +96,20 @@ void Ship::brake(double stabilizer){
         stabilizer=stabilizer_acceleration*mass;
     }
 
-    net_force+=Vector(stabilizer,velocity.opposite().direction);
+    Vector brake_force(stabilizer,velocity.opposite().direction);
+
+    net_force+=brake_force;
+
+    if(brake_force.magnitude>0.0){
+        stabilize_brake=true;
+        stabilize_brake_vector.magnitude=stabilizer_acceleration;
+        stabilize_brake_vector.direction=velocity.direction;
+    }
 }
 
 void Ship::apply_thrust(){
+    reset_stabilizer_input();
+
     if(thrust_left){
         net_angular_force+=get_angular_thrust()/UPDATE_RATE;
     }
@@ -84,7 +129,7 @@ void Ship::apply_thrust(){
 
     reduce_angle(angle);
 
-    if(!thrust_right && !thrust_left){
+    if(stabilizer_angular && !thrust_right && !thrust_left){
         double angular_stabilizer=get_angular_stabilizer()/UPDATE_RATE;
         if(braking){
             angular_stabilizer+=get_brake()/UPDATE_RATE;
@@ -101,9 +146,16 @@ void Ship::apply_thrust(){
         }
 
         net_angular_force+=angular_stabilizer;
+
+        if(angular_stabilizer>0.0){
+            stabilize_left=true;
+        }
+        else if(angular_stabilizer<0.0){
+            stabilize_right=true;
+        }
     }
 
-    if(!thrust_down && !thrust_up){
+    if(stabilizer_positional && !thrust_down && !thrust_up){
         brake(get_stabilizer()/UPDATE_RATE);
     }
 }
@@ -113,60 +165,62 @@ void Ship::ai(){
         reset_thrust_input();
 
         if(faction=="hostile"){
-            Ship* ship=&game.world.ships[0];
+            Ship* ship=game.world.get_player();
 
-            double target_angle=get_angle_to_circ(circle,ship->circle,game.camera);
+            if(ship->is_alive()){
+                double target_angle=get_angle_to_circ(circle,ship->circle,game.camera);
 
-            reduce_angle(angle);
-            reduce_angle(velocity.direction);
+                reduce_angle(angle);
+                reduce_angle(velocity.direction);
 
-            double angle_differential=target_angle-angle;
-            if(angle_differential>180.0){
-                angle_differential-=360.0;
-            }
-            else if(angle_differential<-180.0){
-                angle_differential+=360.0;
-            }
-
-            double velocity_differential=0.0;
-            if(velocity.magnitude>=32.0){
-                velocity_differential=target_angle-velocity.direction;
-                if(velocity_differential>180.0){
-                    velocity_differential-=360.0;
+                double angle_differential=target_angle-angle;
+                if(angle_differential>180.0){
+                    angle_differential-=360.0;
                 }
-                else if(velocity_differential<-180.0){
-                    velocity_differential+=360.0;
+                else if(angle_differential<-180.0){
+                    angle_differential+=360.0;
                 }
-            }
 
-            double velocity_cap=0.0;
-            double distance=distance_between_points(circle.x,circle.y,ship->circle.x,ship->circle.y);
-            if(distance>128.0){
-                velocity_cap=128.0;
-            }
-            else if(distance<=128.0 && distance>64.0){
-                velocity_cap=64.0;
-            }
-            else if(distance<=64.0 && distance>32.0){
-                velocity_cap=32.0;
-            }
-            else if(distance<=32.0){
-                velocity_cap=0.0;
-            }
+                double velocity_differential=0.0;
+                if(velocity.magnitude>=32.0){
+                    velocity_differential=target_angle-velocity.direction;
+                    if(velocity_differential>180.0){
+                        velocity_differential-=360.0;
+                    }
+                    else if(velocity_differential<-180.0){
+                        velocity_differential+=360.0;
+                    }
+                }
 
-            if(abs(angle_differential)>15.0 && abs(angular_velocity)<200.0){
-                if(angle_differential>0.0){
-                    thrust_left=true;
+                double velocity_cap=0.0;
+                double distance=distance_between_points(circle.x,circle.y,ship->circle.x,ship->circle.y);
+                if(distance>128.0){
+                    velocity_cap=128.0;
+                }
+                else if(distance<=128.0 && distance>64.0){
+                    velocity_cap=64.0;
+                }
+                else if(distance<=64.0 && distance>32.0){
+                    velocity_cap=32.0;
+                }
+                else if(distance<=32.0){
+                    velocity_cap=0.0;
+                }
+
+                if(abs(angle_differential)>15.0 && abs(angular_velocity)<200.0){
+                    if(angle_differential>0.0){
+                        thrust_left=true;
+                    }
+                    else{
+                        thrust_right=true;
+                    }
+                }
+                else if(abs(angle_differential)<=15.0 && abs(velocity_differential)<=15.0 && abs(velocity.magnitude)<velocity_cap){
+                    thrust_up=true;
                 }
                 else{
-                    thrust_right=true;
+                    braking=true;
                 }
-            }
-            else if(abs(angle_differential)<=15.0 && abs(velocity_differential)<=15.0 && abs(velocity.magnitude)<velocity_cap){
-                thrust_up=true;
-            }
-            else{
-                braking=true;
             }
         }
     }
@@ -182,7 +236,7 @@ void Ship::accelerate(){
 
 void Ship::movement(uint32_t index){
     if(is_alive()){
-        Object::movement(index);
+        Object::movement();
 
         for(uint32_t i=0;i<game.world.ships.size();i++){
             Ship* ship=&game.world.ships[i];
@@ -303,7 +357,79 @@ void Ship::take_damage(Vector damage_force){
         if(armor<0.01){
             armor=0.01;
         }
+
+        if(!is_alive()){
+            die();
+        }
     }
+}
+
+void Ship::die(){
+    health=0.0;
+
+    if(game.effect_allowed()){
+        Sprite sprite_explosion;
+        sprite_explosion.set_name("explosion");
+
+        double scale=(circle.r*2.0)/((sprite_explosion.get_width()+sprite_explosion.get_height())/2.0);
+
+        game.world.effects_transient.push_back(Effect_Transient(circle.x,circle.y,velocity,angular_velocity,scale,angle,"explosion"));
+    }
+
+    sound_system.play_sound("explosion_"+string_stuff.num_to_string(game.rng.random_range(0,5)),circle.x,circle.y);
+}
+
+void Ship::create_thrust_effect(string direction,double scale){
+    Sprite sprite_thrust;
+    sprite_thrust.set_name("thrust");
+
+    double thruster_scale=(circle.r*2.0)/(sprite_thrust.get_width()+sprite_thrust.get_height());
+
+    Coords thruster_coords;
+    double thrust_angle=0.0;
+    if(direction=="left"){
+        thruster_coords=get_thruster_left();
+        thrust_angle=-90.0;
+    }
+    else if(direction=="right"){
+        thruster_coords=get_thruster_right();
+        thrust_angle=90.0;
+    }
+    else if(direction=="up"){
+        thruster_coords=get_thruster_up();
+        thrust_angle=180.0;
+    }
+    else if(direction=="down"){
+        thruster_coords=get_thruster_down();
+        thrust_angle=0.0;
+    }
+    else if(direction=="none"){
+        thruster_coords=get_thruster_down();
+        thrust_angle=stabilize_brake_vector.direction;
+    }
+
+    Collision_Circ circle_thruster(circle.x-circle.r+(double)thruster_coords.x,circle.y-circle.r+(double)thruster_coords.y,0.0);
+
+    Vector thruster_position(abs(distance_between_points(circle.x,circle.y,circle_thruster.x,circle_thruster.y)),get_angle_to_circ(circle,circle_thruster,game.camera));
+    if(direction!="none"){
+        thruster_position.direction+=angle;
+    }
+    else{
+        thruster_position.direction=stabilize_brake_vector.direction;
+    }
+    Vector_Components vc=thruster_position.get_components();
+
+    Vector thruster_velocity=velocity;
+    if(direction!="none"){
+        thruster_velocity.direction+=thrust_angle;
+        thruster_velocity.magnitude*=1.1;
+    }
+    else{
+        thruster_velocity.direction=thrust_angle;
+        thruster_velocity.magnitude+=stabilize_brake_vector.magnitude;
+    }
+
+    game.world.effects_transient.push_back(Effect_Transient(circle.x+vc.a,circle.y+vc.b,thruster_velocity,angular_velocity,thruster_scale*scale,angle,"thrust"));
 }
 
 void Ship::animate(){
@@ -311,19 +437,67 @@ void Ship::animate(){
         if(collision_check_circ_rect(circle*game.camera_zoom,game.camera)){
             Object::animate();
 
-            sprite_thrust.animate();
-        }
-    }
-}
+            double thrust_effect_rate=0.2;
 
-void Ship::render(){
-    if(is_alive()){
-        if(collision_check_circ_rect(circle*game.camera_zoom,game.camera)){
-            if(thrust_right){
-                ///sprite_thrust.render((circle.x)*game.camera_zoom-game.camera.x,(circle.y-circle.r/2.0-sprite_thrust.get_height())*game.camera_zoom-game.camera.y,1.0,game.camera_zoom,game.camera_zoom,angle);
+            double sound_thrust_rate=0.5;
+            double sound_falloff=32.0;
+            if(this==game.world.get_player()){
+                sound_falloff=-1.0;
             }
 
-            Object::render();
+            if((thrust_left || thrust_up || thrust_right || thrust_down) && --counter_sound_thrust<=0){
+                counter_sound_thrust=sound_thrust_rate*UPDATE_RATE;
+                sound_system.play_sound("thrust_"+string_stuff.num_to_string(game.rng.random_range(0,2)),circle.x,circle.y,sound_falloff);
+            }
+
+            if((stabilize_left || stabilize_right || stabilize_brake) && --counter_sound_stabilize<=0){
+                counter_sound_stabilize=sound_thrust_rate*UPDATE_RATE;
+                sound_system.play_sound("stabilize_"+string_stuff.num_to_string(game.rng.random_range(0,2)),circle.x,circle.y,sound_falloff);
+            }
+
+            if(thrust_left){
+                if(game.effect_allowed() && --counter_thrust_left<=0){
+                    counter_thrust_left=thrust_effect_rate*UPDATE_RATE;
+                    create_thrust_effect("left");
+                }
+            }
+            if(thrust_right){
+                if(game.effect_allowed() && --counter_thrust_right<=0){
+                    counter_thrust_right=thrust_effect_rate*UPDATE_RATE;
+                    create_thrust_effect("right");
+                }
+            }
+            if(thrust_up){
+                if(game.effect_allowed() && --counter_thrust_up<=0){
+                    counter_thrust_up=thrust_effect_rate*UPDATE_RATE;
+                    create_thrust_effect("up");
+                }
+            }
+            if(thrust_down){
+                if(game.effect_allowed() && --counter_thrust_down<=0){
+                    counter_thrust_down=thrust_effect_rate*UPDATE_RATE;
+                    create_thrust_effect("down");
+                }
+            }
+
+            if(stabilize_left){
+                if(game.effect_allowed() && --counter_stabilize_left<=0){
+                    counter_stabilize_left=thrust_effect_rate*UPDATE_RATE;
+                    create_thrust_effect("left",0.5);
+                }
+            }
+            if(stabilize_right){
+                if(game.effect_allowed() && --counter_stabilize_right<=0){
+                    counter_stabilize_right=thrust_effect_rate*UPDATE_RATE;
+                    create_thrust_effect("right",0.5);
+                }
+            }
+            if(stabilize_brake){
+                if(game.effect_allowed() && --counter_stabilize_brake<=0){
+                    counter_stabilize_brake=thrust_effect_rate*UPDATE_RATE;
+                    create_thrust_effect("none",0.5);
+                }
+            }
         }
     }
 }

@@ -34,7 +34,7 @@ public:
     bool is_alive();
 
     void accelerate();
-    void movement(uint32_t index);
+    void movement();
     void gravitate(uint32_t index);
 
     void animate();

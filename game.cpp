@@ -92,7 +92,7 @@ string Game::get_random_direction_cardinal_ordinal(){
 }
 
 bool Game::effect_allowed(){
-    uint32_t effects=/**effects_example.size()*/0;
+    uint32_t effects=world.effects_transient.size();
 
     if(effects<option_effect_limit){
         return true;
@@ -242,7 +242,7 @@ void Game::set_camera(){
     }
 
     if(true){
-        center_camera(world.ships[0].circle);
+        center_camera(world.get_player()->circle);
     }
     else{
         if(cam_state=="left"){

@@ -2,6 +2,8 @@
 #define ship_h
 
 #include "object.h"
+#include "coords.h"
+#include "vector.h"
 
 class Ship: public Object{
 public:
@@ -14,11 +16,27 @@ public:
     bool thrust_down;
     bool braking;
 
+    bool stabilize_left;
+    bool stabilize_right;
+    bool stabilize_brake;
+    Vector stabilize_brake_vector;
+
+    int counter_thrust_left;
+    int counter_thrust_up;
+    int counter_thrust_right;
+    int counter_thrust_down;
+    int counter_stabilize_left;
+    int counter_stabilize_right;
+    int counter_stabilize_brake;
+    int counter_sound_thrust;
+    int counter_sound_stabilize;
+
+    bool stabilizer_positional;
+    bool stabilizer_angular;
+
     double armor;
 
     std::string faction;
-
-    Sprite sprite_thrust;
 
     Ship(std::string get_type,double get_mass,Collision_Circ get_circle,Vector get_velocity,double get_angular_velocity,std::string get_faction);
 
@@ -29,8 +47,14 @@ public:
     double get_brake();
     double get_stabilizer();
     double get_angular_stabilizer();
+    Coords get_thruster_up();
+    Coords get_thruster_down();
+    Coords get_thruster_left();
+    Coords get_thruster_right();
 
     void reset_thrust_input();
+    //Stabilizer "input" is automated and used for creating effects
+    void reset_stabilizer_input();
 
     void brake(double stabilizer);
     void apply_thrust();
@@ -41,9 +65,11 @@ public:
     void collide_with_ship(uint32_t index);
 
     void take_damage(Vector damage_force);
+    void die();
+
+    void create_thrust_effect(std::string direction,double scale=1.0);
 
     void animate();
-    void render();
 };
 
 #endif

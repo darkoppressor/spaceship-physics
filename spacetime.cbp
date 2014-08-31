@@ -287,6 +287,8 @@
 		<Unit filename="cursor.cpp" />
 		<Unit filename="cursor.h" />
 		<Unit filename="dev_info.cpp" />
+		<Unit filename="effect_transient.cpp" />
+		<Unit filename="effect_transient.h" />
 		<Unit filename="engine_interface.cpp" />
 		<Unit filename="engine_interface.h" />
 		<Unit filename="engine_interface_game.cpp" />

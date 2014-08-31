@@ -30,6 +30,10 @@ void Engine_Interface::load_ship_type(File_IO_Load* load){
 
         string str_name="name:";
         string str_sprite="sprite:";
+        string str_thruster_up="thruster_up:";
+        string str_thruster_down="thruster_down:";
+        string str_thruster_left="thruster_left:";
+        string str_thruster_right="thruster_right:";
         string str_health="health:";
         string str_armor="armor:";
         string str_thrust="thrust:";
@@ -61,6 +65,54 @@ void Engine_Interface::load_ship_type(File_IO_Load* load){
             line.erase(0,str_sprite.length());
 
             ship_types[ship_types.size()-1].sprite=line;
+        }
+        //thruster_up
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_thruster_up)){
+            line.erase(0,str_thruster_up.length());
+
+            vector<string> coords;
+            boost::algorithm::split(coords,line,boost::algorithm::is_any_of(","));
+
+            if(coords.size()>=2){
+                ship_types[ship_types.size()-1].thruster_up.x=string_stuff.string_to_long(coords[0]);
+                ship_types[ship_types.size()-1].thruster_up.y=string_stuff.string_to_long(coords[1]);
+            }
+        }
+        //thruster_down
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_thruster_down)){
+            line.erase(0,str_thruster_down.length());
+
+            vector<string> coords;
+            boost::algorithm::split(coords,line,boost::algorithm::is_any_of(","));
+
+            if(coords.size()>=2){
+                ship_types[ship_types.size()-1].thruster_down.x=string_stuff.string_to_long(coords[0]);
+                ship_types[ship_types.size()-1].thruster_down.y=string_stuff.string_to_long(coords[1]);
+            }
+        }
+        //thruster_left
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_thruster_left)){
+            line.erase(0,str_thruster_left.length());
+
+            vector<string> coords;
+            boost::algorithm::split(coords,line,boost::algorithm::is_any_of(","));
+
+            if(coords.size()>=2){
+                ship_types[ship_types.size()-1].thruster_left.x=string_stuff.string_to_long(coords[0]);
+                ship_types[ship_types.size()-1].thruster_left.y=string_stuff.string_to_long(coords[1]);
+            }
+        }
+        //thruster_right
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_thruster_right)){
+            line.erase(0,str_thruster_right.length());
+
+            vector<string> coords;
+            boost::algorithm::split(coords,line,boost::algorithm::is_any_of(","));
+
+            if(coords.size()>=2){
+                ship_types[ship_types.size()-1].thruster_right.x=string_stuff.string_to_long(coords[0]);
+                ship_types[ship_types.size()-1].thruster_right.y=string_stuff.string_to_long(coords[1]);
+            }
         }
         //health
         else if(!multi_line_comment && boost::algorithm::starts_with(line,str_health)){

@@ -1,2 +1,0 @@
-Thrust sprite rendered at thrust points whenever thrusting
-Ditto but for stabilizers (this might be a smaller version of the thrust sprite)

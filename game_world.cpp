@@ -10,6 +10,8 @@ void Game_World::clear_world(){
     }
     backgrounds.clear();
 
+    effects_transient.clear();
+
     ships.clear();
 
     collisions_ship_on_ship.clear();
@@ -27,12 +29,12 @@ void Game_World::generate_world(){
 
     generate_ship("1",vc_player.a,vc_player.b,Vector(0.0,0.0),0.0,"player");
 
-    for(int i=0;i<10;i++){
+    /**for(int i=0;i<10;i++){
         Vector position((double)rng.random_range(0,1000000000)*0.000000001*144.0,(double)rng.random_range(0,359));
         Vector_Components vc=position.get_components_absolute();
 
         generate_ship("1",vc.a,vc.b,Vector(0.0,0.0),0.0,"hostile");
-    }
+    }*/
 
     /**double universe_mass=SOLAR_MASS*1.5;
     double universe_density=(SOLAR_MASS*0.004)/pow(9460528400000000.0,3.0);
@@ -102,6 +104,10 @@ void Game_World::ai(){
 }
 
 void Game_World::movement(){
+    for(uint32_t i=0;i<effects_transient.size();i++){
+        effects_transient[i].movement();
+    }
+
     for(uint32_t i=0;i<ships.size();i++){
         ships[i].accelerate();
     }
@@ -117,15 +123,29 @@ void Game_World::movement(){
 }
 
 void Game_World::events(){
+    for(int i=0;i<effects_transient.size();i++){
+        if(!effects_transient[i].exists){
+            effects_transient.erase(effects_transient.begin()+i);
+            i--;
+        }
+    }
 }
 
 void Game_World::animate(){
+    for(uint32_t i=0;i<effects_transient.size();i++){
+        effects_transient[i].animate();
+    }
+
     for(uint32_t i=0;i<ships.size();i++){
         ships[i].animate();
     }
 }
 
 void Game_World::render(){
+    for(uint32_t i=0;i<effects_transient.size();i++){
+        effects_transient[i].render();
+    }
+
     for(uint32_t i=0;i<ships.size();i++){
         ships[i].render();
     }
@@ -145,4 +165,14 @@ void Game_World::render_background(){
             backgrounds[i].render();
         }
     }
+}
+
+Ship* Game_World::get_player(){
+    Ship* player=0;
+
+    if(ships.size()>=1){
+        player=&ships[0];
+    }
+
+    return player;
 }

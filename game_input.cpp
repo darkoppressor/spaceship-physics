@@ -9,7 +9,7 @@ void Game::prepare_for_input(){
 
         display_scoreboard=false;
 
-        world.ships[0].reset_thrust_input();
+        world.get_player()->reset_thrust_input();
     }
 }
 
@@ -71,19 +71,19 @@ void Game::handle_input_states(){
     if(in_progress){
         if(!paused){
             if(engine_interface.game_command_state("left")){
-                world.ships[0].thrust_left=true;
+                world.get_player()->thrust_left=true;
             }
             if(engine_interface.game_command_state("up")){
-                world.ships[0].thrust_up=true;
+                world.get_player()->thrust_up=true;
             }
             if(engine_interface.game_command_state("right")){
-                world.ships[0].thrust_right=true;
+                world.get_player()->thrust_right=true;
             }
             if(engine_interface.game_command_state("down")){
-                world.ships[0].thrust_down=true;
+                world.get_player()->thrust_down=true;
             }
             if(engine_interface.game_command_state("brake")){
-                world.ships[0].braking=true;
+                world.get_player()->braking=true;
             }
         }
     }
@@ -133,19 +133,17 @@ bool Game::handle_game_command(string command_name){
     ///END OF DEV COMMANDS
 
     if(!paused){
-        //Example command
-        /**if(command_name=="some_command"){
-            ///Command here
+        if(command_name=="positional_stabilizer"){
+            world.get_player()->stabilizer_positional=!world.get_player()->stabilizer_positional;
 
             return true;
-        }*/
+        }
 
-        //Example multiplayer command input
-        /**if(command_name=="some_command"){
-            network.add_command(command_name);
+        if(command_name=="angular_stabilizer"){
+            world.get_player()->stabilizer_angular=!world.get_player()->stabilizer_angular;
 
             return true;
-        }*/
+        }
     }
 
     return false;

@@ -1,7 +1,15 @@
 <animation>
 	name:thrust
-	frame_count:4
-	animation_speed:250
-	frame_width:3
-	end_behavior:continue
+	frame_count:3
+	animation_speed:83
+	frame_width:8
+	end_behavior:stop
+</animation>
+
+<animation>
+	name:explosion
+	frame_count:3
+	animation_speed:83
+	frame_width:16
+	end_behavior:stop
 </animation>

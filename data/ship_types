@@ -1,6 +1,10 @@
 <ship_type>
 	name:0
 	sprite:ship_0
+	thruster_left:5,8
+	thruster_right:5,-1
+	thruster_up:-2,4
+	thruster_down:10,4
 	health:500.0
 	armor:0.25
 	thrust:15000.0
@@ -13,6 +17,10 @@
 <ship_type>
 	name:1
 	sprite:ship_1
+	thruster_left:12,13
+	thruster_right:12,3
+	thruster_up:-2,8
+	thruster_down:18,8
 	health:1000.0
 	armor:0.5
 	thrust:30000.0

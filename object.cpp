@@ -52,7 +52,7 @@ void Object::accelerate(){
     }
 }
 
-void Object::movement(uint32_t index){
+void Object::movement(){
     if(is_alive()){
         Vector_Components vc=velocity.get_components();
 
@@ -81,5 +81,9 @@ void Object::animate(){
 }
 
 void Object::render(){
-    sprite.render((circle.x-circle.r)*game.camera_zoom-game.camera.x,(circle.y-circle.r)*game.camera_zoom-game.camera.y,1.0,game.camera_zoom,game.camera_zoom,angle);
+    if(is_alive()){
+        if(collision_check_circ_rect(circle*game.camera_zoom,game.camera)){
+            sprite.render((circle.x-circle.r)*game.camera_zoom-game.camera.x,(circle.y-circle.r)*game.camera_zoom-game.camera.y,1.0,game.camera_zoom,game.camera_zoom,angle);
+        }
+    }
 }
