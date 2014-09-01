@@ -1,0 +1,1 @@
+Fix the crash bug with weapons

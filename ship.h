@@ -4,6 +4,9 @@
 #include "object.h"
 #include "coords.h"
 #include "vector.h"
+#include "weapon.h"
+
+#include <vector>
 
 class Ship: public Object{
 public:
@@ -38,7 +41,9 @@ public:
 
     std::string faction;
 
-    Ship(std::string get_type,double get_mass,Collision_Circ get_circle,Vector get_velocity,double get_angular_velocity,std::string get_faction);
+    std::vector<Weapon> weapons;
+
+    Ship(std::string get_type,double get_mass,Collision_Circ get_circle,Vector get_velocity,double get_angular_velocity,std::string get_faction,std::vector<std::string> get_weapons);
 
     double get_health_max();
     double get_armor_max();
@@ -60,6 +65,7 @@ public:
     void apply_thrust();
 
     void ai();
+    void fire_weapons();
     void accelerate();
     void movement(uint32_t index);
     void collide_with_ship(uint32_t index);

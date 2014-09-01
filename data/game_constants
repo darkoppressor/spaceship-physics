@@ -54,7 +54,7 @@
 	// kg
 	name:moon_mass
 	//value:73477000000000000000000.0
-	value:1,848.0
+	value:1848.0
 </game_constant>
 
 <game_constant>
@@ -64,8 +64,7 @@
 </game_constant>
 
 <game_constant>
-	// kg/m^3
-	name:ship_density
-	//value:0.750425127
-	value:0.134014433
+	// pixels
+	name:despawn_radius
+	value:1024.0
 </game_constant>

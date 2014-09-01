@@ -5,6 +5,7 @@
 #include "effect_transient.h"
 #include "ship.h"
 #include "collision.h"
+#include "projectile.h"
 
 #include <vector>
 
@@ -16,13 +17,20 @@ public:
     std::vector<Effect_Transient> effects_transient;
 
     std::vector<Ship> ships;
+    std::vector<Projectile> projectiles;
+
+    std::vector<Ship> new_ships;
+    std::vector<Projectile> new_projectiles;
 
     std::vector<Collision> collisions_ship_on_ship;
+    std::vector<Collision> collisions_projectile_on_ship;
 
     void clear_world();
     void generate_world();
 
-    void generate_ship(std::string type,double x,double y,Vector velocity,double angular_velocity,std::string faction);
+    void generate_ship(std::string type,double x,double y,Vector velocity,double angular_velocity,std::string faction,std::vector<std::string> weapons);
+
+    void spawn_projectile(std::string type,double x,double y,Vector velocity,double angular_velocity,Vector force);
 
     void tick();
     void ai();

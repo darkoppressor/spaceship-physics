@@ -18,7 +18,8 @@ extern double EARTH_MASS;
 extern double EARTH_DENSITY;
 extern double MOON_MASS;
 extern double MOON_DENSITY;
-extern double SHIP_DENSITY;
+
+extern double DESPAWN_RADIUS;
 
 void set_game_constant(std::string name,std::string value);
 

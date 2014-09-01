@@ -1,0 +1,7 @@
+<weapon_type>
+	name:0
+	sound:weapon_fire
+	cooldown:1000.0
+	targeting_radius:64.0
+	force:200000.0
+</weapon_type>

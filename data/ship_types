@@ -7,6 +7,7 @@
 	thruster_down:10,4
 	health:500.0
 	armor:0.25
+	density:0.134014433
 	thrust:15000.0
 	angular_thrust:60000.0
 	brake:30000.0
@@ -23,6 +24,7 @@
 	thruster_down:18,8
 	health:1000.0
 	armor:0.5
+	density:0.134014433
 	thrust:30000.0
 	angular_thrust:120000.0
 	brake:60000.0

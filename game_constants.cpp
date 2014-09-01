@@ -17,7 +17,8 @@ double EARTH_MASS=0.0;
 double EARTH_DENSITY=0.0;
 double MOON_MASS=0.0;
 double MOON_DENSITY=0.0;
-double SHIP_DENSITY=0.0;
+
+double DESPAWN_RADIUS=0.0;
 
 void set_game_constant(string name,string value){
     if(name=="zoom_rate"){
@@ -53,7 +54,7 @@ void set_game_constant(string name,string value){
     else if(name=="moon_density"){
         MOON_DENSITY=string_stuff.string_to_double(value);
     }
-    else if(name=="ship_density"){
-        SHIP_DENSITY=string_stuff.string_to_double(value);
+    else if(name=="despawn_radius"){
+        DESPAWN_RADIUS=string_stuff.string_to_double(value);
     }
 }

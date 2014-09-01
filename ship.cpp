@@ -3,7 +3,7 @@
 
 using namespace std;
 
-Ship::Ship(string get_type,double get_mass,Collision_Circ get_circle,Vector get_velocity,double get_angular_velocity,string get_faction){
+Ship::Ship(string get_type,double get_mass,Collision_Circ get_circle,Vector get_velocity,double get_angular_velocity,string get_faction,vector<string> get_weapons){
     type=get_type;
 
     Object::setup(get_mass,get_circle,get_velocity,get_angular_velocity,get_health_max(),engine_interface.get_ship_type(type)->sprite);
@@ -27,6 +27,10 @@ Ship::Ship(string get_type,double get_mass,Collision_Circ get_circle,Vector get_
     armor=get_armor_max();
 
     faction=get_faction;
+
+    for(int i=0;i<get_weapons.size();i++){
+        weapons.push_back(Weapon(get_weapons[i]));
+    }
 }
 
 double Ship::get_health_max(){
@@ -114,7 +118,7 @@ void Ship::apply_thrust(){
         net_angular_force+=get_angular_thrust()/UPDATE_RATE;
     }
     if(thrust_up){
-        net_force+=Vector(get_thrust()/UPDATE_RATE,angle+0.0);
+        net_force+=Vector(get_thrust()/UPDATE_RATE,angle);
     }
     if(thrust_right){
         net_angular_force-=get_angular_thrust()/UPDATE_RATE;
@@ -164,7 +168,7 @@ void Ship::ai(){
     if(is_alive()){
         reset_thrust_input();
 
-        if(faction=="hostile"){
+        if(faction=="bad"){
             Ship* ship=game.world.get_player();
 
             if(ship->is_alive()){
@@ -220,6 +224,33 @@ void Ship::ai(){
                 }
                 else{
                     braking=true;
+                }
+            }
+        }
+    }
+}
+
+void Ship::fire_weapons(){
+    if(is_alive()){
+        int weapons_ready=0;
+
+        for(int i=0;i<weapons.size();i++){
+            weapons[i].cool();
+
+            if(weapons[i].cooled()){
+                weapons_ready++;
+            }
+        }
+
+        for(int i=0;i<game.world.ships.size() && weapons_ready>0;i++){
+            Ship* ship=&game.world.ships[i];
+
+            if(this!=ship && ship->is_alive() && faction!=ship->faction){
+                for(int n=0;n<weapons.size();n++){
+                    if(weapons[i].cooled() && collision_check_circ(Collision_Circ(circle.x,circle.y,weapons[i].get_targeting_radius()),ship->circle)){
+                        weapons[i].fire("0",circle,get_angle_to_circ(circle,ship->circle,game.camera),velocity,angular_velocity);
+                        weapons_ready--;
+                    }
                 }
             }
         }
@@ -439,61 +470,88 @@ void Ship::animate(){
 
             double thrust_effect_rate=0.2;
 
-            double sound_thrust_rate=0.5;
             double sound_falloff=32.0;
             if(this==game.world.get_player()){
                 sound_falloff=-1.0;
             }
 
-            if((thrust_left || thrust_up || thrust_right || thrust_down) && --counter_sound_thrust<=0){
-                counter_sound_thrust=sound_thrust_rate*UPDATE_RATE;
-                sound_system.play_sound("thrust_"+string_stuff.num_to_string(game.rng.random_range(0,2)),circle.x,circle.y,sound_falloff);
+            if(counter_sound_thrust>0){
+                counter_sound_thrust--;
+            }
+            if(counter_sound_stabilize>0){
+                counter_sound_stabilize--;
+            }
+            if(counter_thrust_left>0){
+                counter_thrust_left--;
+            }
+            if(counter_thrust_right>0){
+                counter_thrust_right--;
+            }
+            if(counter_thrust_up>0){
+                counter_thrust_up--;
+            }
+            if(counter_thrust_down>0){
+                counter_thrust_down--;
+            }
+            if(counter_stabilize_left>0){
+                counter_stabilize_left--;
+            }
+            if(counter_stabilize_right>0){
+                counter_stabilize_right--;
+            }
+            if(counter_stabilize_brake>0){
+                counter_stabilize_brake--;
             }
 
-            if((stabilize_left || stabilize_right || stabilize_brake) && --counter_sound_stabilize<=0){
-                counter_sound_stabilize=sound_thrust_rate*UPDATE_RATE;
-                sound_system.play_sound("stabilize_"+string_stuff.num_to_string(game.rng.random_range(0,2)),circle.x,circle.y,sound_falloff);
+            if((thrust_left || thrust_up || thrust_right || thrust_down) && counter_sound_thrust==0){
+                counter_sound_thrust=thrust_effect_rate*UPDATE_RATE;
+                sound_system.play_sound("thrust",circle.x,circle.y,sound_falloff);
+            }
+
+            if((stabilize_left || stabilize_right || stabilize_brake) && counter_sound_stabilize==0){
+                counter_sound_stabilize=thrust_effect_rate*UPDATE_RATE;
+                sound_system.play_sound("stabilize",circle.x,circle.y,sound_falloff);
             }
 
             if(thrust_left){
-                if(game.effect_allowed() && --counter_thrust_left<=0){
+                if(game.effect_allowed() && counter_thrust_left==0){
                     counter_thrust_left=thrust_effect_rate*UPDATE_RATE;
                     create_thrust_effect("left");
                 }
             }
             if(thrust_right){
-                if(game.effect_allowed() && --counter_thrust_right<=0){
+                if(game.effect_allowed() && counter_thrust_right==0){
                     counter_thrust_right=thrust_effect_rate*UPDATE_RATE;
                     create_thrust_effect("right");
                 }
             }
             if(thrust_up){
-                if(game.effect_allowed() && --counter_thrust_up<=0){
+                if(game.effect_allowed() && counter_thrust_up==0){
                     counter_thrust_up=thrust_effect_rate*UPDATE_RATE;
                     create_thrust_effect("up");
                 }
             }
             if(thrust_down){
-                if(game.effect_allowed() && --counter_thrust_down<=0){
+                if(game.effect_allowed() && counter_thrust_down==0){
                     counter_thrust_down=thrust_effect_rate*UPDATE_RATE;
                     create_thrust_effect("down");
                 }
             }
 
             if(stabilize_left){
-                if(game.effect_allowed() && --counter_stabilize_left<=0){
+                if(game.effect_allowed() && counter_stabilize_left==0){
                     counter_stabilize_left=thrust_effect_rate*UPDATE_RATE;
                     create_thrust_effect("left",0.5);
                 }
             }
             if(stabilize_right){
-                if(game.effect_allowed() && --counter_stabilize_right<=0){
+                if(game.effect_allowed() && counter_stabilize_right==0){
                     counter_stabilize_right=thrust_effect_rate*UPDATE_RATE;
                     create_thrust_effect("right",0.5);
                 }
             }
             if(stabilize_brake){
-                if(game.effect_allowed() && --counter_stabilize_brake<=0){
+                if(game.effect_allowed() && counter_stabilize_brake==0){
                     counter_stabilize_brake=thrust_effect_rate*UPDATE_RATE;
                     create_thrust_effect("none",0.5);
                 }

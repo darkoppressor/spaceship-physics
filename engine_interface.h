@@ -23,6 +23,8 @@
 #include "sprite.h"
 
 #include "ship_type.h"
+#include "projectile_type.h"
+#include "weapon_type.h"
 
 #include <string>
 
@@ -89,6 +91,8 @@ public:
     std::vector<Window> windows;
 
     std::vector<Ship_Type> ship_types;
+    std::vector<Projectile_Type> projectile_types;
+    std::vector<Weapon_Type> weapon_types;
 
     Tooltip tooltip;
 
@@ -318,7 +322,11 @@ public:
     Game_Option* get_game_option(std::string name);
 
     void load_ship_type(File_IO_Load* load);
+    void load_projectile_type(File_IO_Load* load);
+    void load_weapon_type(File_IO_Load* load);
     Ship_Type* get_ship_type(std::string name);
+    Projectile_Type* get_projectile_type(std::string name);
+    Weapon_Type* get_weapon_type(std::string name);
 
     Color_Theme* current_color_theme();
     bool animation_exists(std::string animation_name);

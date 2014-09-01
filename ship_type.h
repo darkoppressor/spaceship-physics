@@ -19,6 +19,9 @@ public:
     double health;
     double armor;
 
+    //kg/m^3
+    double density;
+
     //N/s
     double thrust;
     double angular_thrust;

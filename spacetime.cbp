@@ -342,6 +342,10 @@
 		<Unit filename="object.h" />
 		<Unit filename="pixels.cpp" />
 		<Unit filename="pixels.h" />
+		<Unit filename="projectile.cpp" />
+		<Unit filename="projectile.h" />
+		<Unit filename="projectile_type.cpp" />
+		<Unit filename="projectile_type.h" />
 		<Unit filename="render.cpp" />
 		<Unit filename="render.h" />
 		<Unit filename="rng.cpp" />
@@ -383,6 +387,10 @@
 		<Unit filename="vector.cpp" />
 		<Unit filename="vector.h" />
 		<Unit filename="version.h" />
+		<Unit filename="weapon.cpp" />
+		<Unit filename="weapon.h" />
+		<Unit filename="weapon_type.cpp" />
+		<Unit filename="weapon_type.h" />
 		<Unit filename="window.cpp" />
 		<Unit filename="window.h" />
 		<Unit filename="window_close_function.cpp" />

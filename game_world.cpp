@@ -13,8 +13,13 @@ void Game_World::clear_world(){
     effects_transient.clear();
 
     ships.clear();
+    projectiles.clear();
+
+    new_ships.clear();
+    new_projectiles.clear();
 
     collisions_ship_on_ship.clear();
+    collisions_projectile_on_ship.clear();
 }
 
 void Game_World::generate_world(){
@@ -27,14 +32,24 @@ void Game_World::generate_world(){
     Vector position_player((double)rng.random_range(0,1000000000)*0.000000001*144.0,(double)rng.random_range(0,359));
     Vector_Components vc_player=position_player.get_components_absolute();
 
-    generate_ship("1",vc_player.a,vc_player.b,Vector(0.0,0.0),0.0,"player");
+    vector<string> weapons_player;
+    for(int i=0;i<3;i++){
+        weapons_player.push_back("0");
+    }
 
-    /**for(int i=0;i<10;i++){
+    generate_ship("1",vc_player.a,vc_player.b,Vector(0.0,0.0),0.0,"good",weapons_player);
+
+    for(int i=0;i<10;i++){
         Vector position((double)rng.random_range(0,1000000000)*0.000000001*144.0,(double)rng.random_range(0,359));
         Vector_Components vc=position.get_components_absolute();
 
-        generate_ship("1",vc.a,vc.b,Vector(0.0,0.0),0.0,"hostile");
-    }*/
+        vector<string> weapons;
+        /**for(int n=0;n<1;n++){
+            weapons.push_back("0");
+        }*/
+
+        generate_ship("1",vc.a,vc.b,Vector(0.0,0.0),0.0,"bad",weapons);
+    }
 
     /**double universe_mass=SOLAR_MASS*1.5;
     double universe_density=(SOLAR_MASS*0.004)/pow(9460528400000000.0,3.0);
@@ -80,18 +95,30 @@ void Game_World::generate_world(){
     }*/
 }
 
-void Game_World::generate_ship(string type,double x,double y,Vector velocity,double angular_velocity,string faction){
-    RNG rng;
+void Game_World::generate_ship(string type,double x,double y,Vector velocity,double angular_velocity,string faction,vector<string> weapons){
+    Sprite sprite;
+    sprite.set_name(engine_interface.get_ship_type(type)->sprite);
 
-    Sprite sprite_ship;
-    sprite_ship.set_name(engine_interface.get_ship_type(type)->sprite);
-
-    double radius=sprite_ship.get_width()/2.0;
-    double density=(double)rng.random_range(900,1100)*0.001*SHIP_DENSITY;
+    double radius=sprite.get_width()/2.0;
+    double density=engine_interface.get_ship_type(type)->density;
     double volume=(4.0/3.0)*M_PI*pow(radius,3.0);
     double mass=volume*density;
 
-    ships.push_back(Ship(type,mass,Collision_Circ(x,y,radius),velocity,angular_velocity,faction));
+    new_ships.push_back(Ship(type,mass,Collision_Circ(x,y,radius),velocity,angular_velocity,faction,weapons));
+}
+
+void Game_World::spawn_projectile(string type,double x,double y,Vector velocity,double angular_velocity,Vector force){
+    Sprite sprite;
+    sprite.set_name(engine_interface.get_projectile_type(type)->sprite);
+
+    double radius=sprite.get_width()/2.0;
+    double density=engine_interface.get_projectile_type(type)->density;
+    double volume=(4.0/3.0)*M_PI*pow(radius,3.0);
+    double mass=volume*density;
+
+    Vector acceleration=force/mass;
+
+    new_projectiles.push_back(Projectile(type,mass,Collision_Circ(x,y,radius),velocity+acceleration,angular_velocity));
 }
 
 void Game_World::tick(){
@@ -100,6 +127,10 @@ void Game_World::tick(){
 void Game_World::ai(){
     for(uint32_t i=1;i<ships.size();i++){
         ships[i].ai();
+    }
+
+    for(uint32_t i=0;i<ships.size();i++){
+        ships[i].fire_weapons();
     }
 }
 
@@ -112,17 +143,56 @@ void Game_World::movement(){
         ships[i].accelerate();
     }
 
+    for(uint32_t i=0;i<projectiles.size();i++){
+        projectiles[i].accelerate();
+    }
+
     for(uint32_t i=0;i<ships.size();i++){
         ships[i].movement(i);
+    }
+
+    for(uint32_t i=0;i<projectiles.size();i++){
+        projectiles[i].movement(i);
     }
 
     for(uint32_t i=0;i<collisions_ship_on_ship.size();i++){
         ships[collisions_ship_on_ship[i].object1].collide_with_ship(collisions_ship_on_ship[i].object2);
     }
     collisions_ship_on_ship.clear();
+
+    for(uint32_t i=0;i<collisions_projectile_on_ship.size();i++){
+        projectiles[collisions_projectile_on_ship[i].object1].collide_with_ship(collisions_projectile_on_ship[i].object2);
+    }
+    collisions_projectile_on_ship.clear();
 }
 
 void Game_World::events(){
+    Ship* player=get_player();
+
+    for(int i=0;i<ships.size();i++){
+        if(!ships[i].is_alive() || !collision_check_circ(ships[i].circle,Collision_Circ(player->circle.x,player->circle.y,DESPAWN_RADIUS))){
+            ships.erase(ships.begin()+i);
+            i--;
+        }
+    }
+
+    for(int i=0;i<projectiles.size();i++){
+        if(!projectiles[i].is_alive() || !collision_check_circ(projectiles[i].circle,Collision_Circ(player->circle.x,player->circle.y,DESPAWN_RADIUS))){
+            projectiles.erase(projectiles.begin()+i);
+            i--;
+        }
+    }
+
+    for(int i=0;i<new_ships.size();i++){
+        ships.push_back(new_ships[i]);
+    }
+    new_ships.clear();
+
+    for(int i=0;i<new_projectiles.size();i++){
+        projectiles.push_back(new_projectiles[i]);
+    }
+    new_projectiles.clear();
+
     for(int i=0;i<effects_transient.size();i++){
         if(!effects_transient[i].exists){
             effects_transient.erase(effects_transient.begin()+i);
@@ -139,6 +209,10 @@ void Game_World::animate(){
     for(uint32_t i=0;i<ships.size();i++){
         ships[i].animate();
     }
+
+    for(uint32_t i=0;i<projectiles.size();i++){
+        projectiles[i].animate();
+    }
 }
 
 void Game_World::render(){
@@ -148,6 +222,10 @@ void Game_World::render(){
 
     for(uint32_t i=0;i<ships.size();i++){
         ships[i].render();
+    }
+
+    for(uint32_t i=0;i<projectiles.size();i++){
+        projectiles[i].render();
     }
 }
 

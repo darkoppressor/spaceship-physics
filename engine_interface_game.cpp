@@ -8,16 +8,26 @@ using namespace std;
 
 void Engine_Interface::load_data_game(){
     load_data("ship_type");
+    load_data("projectile_type");
+    load_data("weapon_type");
 }
 
 void Engine_Interface::load_data_script_game(string script,File_IO_Load* load){
     if(script=="ship_type"){
         load_ship_type(load);
     }
+    else if(script=="projectile_type"){
+        load_projectile_type(load);
+    }
+    else if(script=="weapon_type"){
+        load_weapon_type(load);
+    }
 }
 
 void Engine_Interface::unload_data_game(){
     ship_types.clear();
+    projectile_types.clear();
+    weapon_types.clear();
 }
 
 void Engine_Interface::load_ship_type(File_IO_Load* load){
@@ -36,6 +46,7 @@ void Engine_Interface::load_ship_type(File_IO_Load* load){
         string str_thruster_right="thruster_right:";
         string str_health="health:";
         string str_armor="armor:";
+        string str_density="density:";
         string str_thrust="thrust:";
         string str_angular_thrust="angular_thrust:";
         string str_brake="brake:";
@@ -126,6 +137,12 @@ void Engine_Interface::load_ship_type(File_IO_Load* load){
 
             ship_types[ship_types.size()-1].armor=string_stuff.string_to_double(line);
         }
+        //density
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_density)){
+            line.erase(0,str_density.length());
+
+            ship_types[ship_types.size()-1].density=string_stuff.string_to_double(line);
+        }
         //thrust
         else if(!multi_line_comment && boost::algorithm::starts_with(line,str_thrust)){
             line.erase(0,str_thrust.length());
@@ -163,6 +180,139 @@ void Engine_Interface::load_ship_type(File_IO_Load* load){
     }
 }
 
+void Engine_Interface::load_projectile_type(File_IO_Load* load){
+    projectile_types.push_back(Projectile_Type());
+
+    bool multi_line_comment=false;
+
+    while(!load->eof()){
+        string line="";
+
+        string str_name="name:";
+        string str_sprite="sprite:";
+        string str_sound_thrust="sound_thrust:";
+        string str_health="health:";
+        string str_density="density:";
+        string str_thrust="thrust:";
+
+        load->getline(&line);
+        boost::algorithm::trim(line);
+
+        if(boost::algorithm::contains(line,"*/")){
+            multi_line_comment=false;
+        }
+        if(!multi_line_comment && boost::algorithm::starts_with(line,"/*")){
+            multi_line_comment=true;
+        }
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,"//")){
+        }
+
+        //name
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_name)){
+            line.erase(0,str_name.length());
+
+            projectile_types[projectile_types.size()-1].name=line;
+        }
+        //sprite
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_sprite)){
+            line.erase(0,str_sprite.length());
+
+            projectile_types[projectile_types.size()-1].sprite=line;
+        }
+        //sound_thrust
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_sound_thrust)){
+            line.erase(0,str_sound_thrust.length());
+
+            projectile_types[projectile_types.size()-1].sound_thrust=line;
+        }
+        //health
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_health)){
+            line.erase(0,str_health.length());
+
+            projectile_types[projectile_types.size()-1].health=string_stuff.string_to_double(line);
+        }
+        //density
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_density)){
+            line.erase(0,str_density.length());
+
+            projectile_types[projectile_types.size()-1].density=string_stuff.string_to_double(line);
+        }
+        //thrust
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_thrust)){
+            line.erase(0,str_thrust.length());
+
+            projectile_types[projectile_types.size()-1].thrust=string_stuff.string_to_double(line);
+        }
+
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,"</projectile_type>")){
+            return;
+        }
+    }
+}
+
+void Engine_Interface::load_weapon_type(File_IO_Load* load){
+    weapon_types.push_back(Weapon_Type());
+
+    bool multi_line_comment=false;
+
+    while(!load->eof()){
+        string line="";
+
+        string str_name="name:";
+        string str_sound="sound:";
+        string str_cooldown="cooldown:";
+        string str_targeting_radius="targeting_radius:";
+        string str_force="force:";
+
+        load->getline(&line);
+        boost::algorithm::trim(line);
+
+        if(boost::algorithm::contains(line,"*/")){
+            multi_line_comment=false;
+        }
+        if(!multi_line_comment && boost::algorithm::starts_with(line,"/*")){
+            multi_line_comment=true;
+        }
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,"//")){
+        }
+
+        //name
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_name)){
+            line.erase(0,str_name.length());
+
+            weapon_types[weapon_types.size()-1].name=line;
+        }
+        //sound
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_sound)){
+            line.erase(0,str_sound.length());
+
+            weapon_types[weapon_types.size()-1].sound=line;
+        }
+        //cooldown
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_cooldown)){
+            line.erase(0,str_cooldown.length());
+
+            weapon_types[weapon_types.size()-1].cooldown=string_stuff.string_to_double(line);
+        }
+        //targeting_radius
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_targeting_radius)){
+            line.erase(0,str_targeting_radius.length());
+
+            weapon_types[weapon_types.size()-1].targeting_radius=string_stuff.string_to_double(line);
+        }
+        //force
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,str_force)){
+            line.erase(0,str_force.length());
+
+            weapon_types[weapon_types.size()-1].force=string_stuff.string_to_double(line);
+        }
+
+        else if(!multi_line_comment && boost::algorithm::starts_with(line,"</weapon_type>")){
+            return;
+        }
+    }
+}
+
 Ship_Type* Engine_Interface::get_ship_type(string name){
     Ship_Type* ptr_object=0;
 
@@ -176,6 +326,42 @@ Ship_Type* Engine_Interface::get_ship_type(string name){
 
     if(ptr_object==0){
         message_log.add_error("Error accessing ship type '"+name+"'");
+    }
+
+    return ptr_object;
+}
+
+Projectile_Type* Engine_Interface::get_projectile_type(string name){
+    Projectile_Type* ptr_object=0;
+
+    for(int i=0;i<projectile_types.size();i++){
+        if(projectile_types[i].name==name){
+            ptr_object=&projectile_types[i];
+
+            break;
+        }
+    }
+
+    if(ptr_object==0){
+        message_log.add_error("Error accessing projectile type '"+name+"'");
+    }
+
+    return ptr_object;
+}
+
+Weapon_Type* Engine_Interface::get_weapon_type(string name){
+    Weapon_Type* ptr_object=0;
+
+    for(int i=0;i<weapon_types.size();i++){
+        if(weapon_types[i].name==name){
+            ptr_object=&weapon_types[i];
+
+            break;
+        }
+    }
+
+    if(ptr_object==0){
+        message_log.add_error("Error accessing weapon type '"+name+"'");
     }
 
     return ptr_object;

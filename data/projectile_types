@@ -1,0 +1,8 @@
+<projectile_type>
+	name:0
+	sprite:projectile_0
+	sound_thrust:thrust
+	health:100.0
+	density:0.134014433
+	thrust:120000.0
+</projectile_type>
