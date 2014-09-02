@@ -28,8 +28,7 @@ public:
     void clear_world();
     void generate_world();
 
-    void generate_ship(std::string type,double x,double y,Vector velocity,double angular_velocity,std::string faction,std::vector<std::string> weapons);
-
+    void spawn_ship(std::string type,double x,double y,Vector velocity,double angular_velocity,std::string faction,std::vector<std::string> weapons);
     void spawn_projectile(std::string type,double x,double y,Vector velocity,double angular_velocity,Vector force);
 
     void tick();

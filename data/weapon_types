@@ -2,6 +2,22 @@
 	name:0
 	sound:weapon_fire
 	cooldown:1000.0
-	targeting_radius:64.0
-	force:200000.0
+	targeting_radius:80.0
+	force:500000.0
+</weapon_type>
+
+<weapon_type>
+	name:1
+	sound:weapon_fire
+	cooldown:1500.0
+	targeting_radius:80.0
+	force:665000.0
+</weapon_type>
+
+<weapon_type>
+	name:2
+	sound:weapon_fire
+	cooldown:2000.0
+	targeting_radius:80.0
+	force:831250.0
 </weapon_type>

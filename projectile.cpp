@@ -165,15 +165,19 @@ void Projectile::animate(){
 
             double thrust_effect_rate=0.2;
 
-            double sound_falloff=32.0;
+            string sound_thrust=get_sound_thrust();
 
-            if(counter_sound_thrust>0){
-                counter_sound_thrust--;
-            }
+            if(sound_thrust.length()>0){
+                if(counter_sound_thrust>0){
+                    counter_sound_thrust--;
+                }
 
-            if(counter_sound_thrust==0){
-                counter_sound_thrust=thrust_effect_rate*UPDATE_RATE;
-                sound_system.play_sound(get_sound_thrust(),circle.x,circle.y,sound_falloff);
+                if(counter_sound_thrust==0){
+                    double sound_falloff=32.0;
+
+                    counter_sound_thrust=thrust_effect_rate*UPDATE_RATE;
+                    sound_system.play_sound(sound_thrust,circle.x,circle.y,sound_falloff);
+                }
             }
         }
     }

@@ -33,22 +33,20 @@ void Game_World::generate_world(){
     Vector_Components vc_player=position_player.get_components_absolute();
 
     vector<string> weapons_player;
-    for(int i=0;i<3;i++){
-        weapons_player.push_back("0");
-    }
+    weapons_player.push_back("0");
+    weapons_player.push_back("1");
+    weapons_player.push_back("2");
 
-    generate_ship("1",vc_player.a,vc_player.b,Vector(0.0,0.0),0.0,"good",weapons_player);
+    spawn_ship("1",vc_player.a,vc_player.b,Vector(0.0,0.0),0.0,"good",weapons_player);
 
     for(int i=0;i<10;i++){
         Vector position((double)rng.random_range(0,1000000000)*0.000000001*144.0,(double)rng.random_range(0,359));
         Vector_Components vc=position.get_components_absolute();
 
         vector<string> weapons;
-        /**for(int n=0;n<1;n++){
-            weapons.push_back("0");
-        }*/
+        weapons.push_back("0");
 
-        generate_ship("1",vc.a,vc.b,Vector(0.0,0.0),0.0,"bad",weapons);
+        spawn_ship("0",vc.a,vc.b,Vector(0.0,0.0),0.0,"bad",weapons);
     }
 
     /**double universe_mass=SOLAR_MASS*1.5;
@@ -95,7 +93,7 @@ void Game_World::generate_world(){
     }*/
 }
 
-void Game_World::generate_ship(string type,double x,double y,Vector velocity,double angular_velocity,string faction,vector<string> weapons){
+void Game_World::spawn_ship(string type,double x,double y,Vector velocity,double angular_velocity,string faction,vector<string> weapons){
     Sprite sprite;
     sprite.set_name(engine_interface.get_ship_type(type)->sprite);
 
@@ -167,9 +165,9 @@ void Game_World::movement(){
 }
 
 void Game_World::events(){
-    Ship* player=get_player();
+    for(int i=1;i<ships.size();i++){
+        Ship* player=get_player();
 
-    for(int i=0;i<ships.size();i++){
         if(!ships[i].is_alive() || !collision_check_circ(ships[i].circle,Collision_Circ(player->circle.x,player->circle.y,DESPAWN_RADIUS))){
             ships.erase(ships.begin()+i);
             i--;
@@ -177,6 +175,8 @@ void Game_World::events(){
     }
 
     for(int i=0;i<projectiles.size();i++){
+        Ship* player=get_player();
+
         if(!projectiles[i].is_alive() || !collision_check_circ(projectiles[i].circle,Collision_Circ(player->circle.x,player->circle.y,DESPAWN_RADIUS))){
             projectiles.erase(projectiles.begin()+i);
             i--;

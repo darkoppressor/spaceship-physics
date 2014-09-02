@@ -247,8 +247,8 @@ void Ship::fire_weapons(){
 
             if(this!=ship && ship->is_alive() && faction!=ship->faction){
                 for(int n=0;n<weapons.size();n++){
-                    if(weapons[i].cooled() && collision_check_circ(Collision_Circ(circle.x,circle.y,weapons[i].get_targeting_radius()),ship->circle)){
-                        weapons[i].fire("0",circle,get_angle_to_circ(circle,ship->circle,game.camera),velocity,angular_velocity);
+                    if(weapons[n].cooled() && collision_check_circ(Collision_Circ(circle.x,circle.y,weapons[n].get_targeting_radius()),ship->circle)){
+                        weapons[n].fire("0",circle,get_angle_to_circ(circle,ship->circle,game.camera),velocity,angular_velocity);
                         weapons_ready--;
                     }
                 }

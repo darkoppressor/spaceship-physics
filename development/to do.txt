@@ -1,1 +1,3 @@
-Fix the crash bug with weapons
+Move to larger resolution
+
+Rename 
