@@ -2,14 +2,14 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="spacetime" />
+		<Option title="spaceship-physics" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Option extended_obj_names="1" />
 		<Build>
 			<Target title="Release-Windows-x86_64">
 				<Option platforms="Windows;" />
-				<Option output="Spacetime-Windows-x86_64.exe" prefix_auto="1" extension_auto="0" />
+				<Option output="Spaceship-Physics-Windows-x86_64.exe" prefix_auto="1" extension_auto="0" />
 				<Option object_output=".objs/windows-x86_64" />
 				<Option type="0" />
 				<Option compiler="gcc" />
@@ -41,7 +41,7 @@
 			</Target>
 			<Target title="Release-Windows-x86">
 				<Option platforms="Windows;" />
-				<Option output="Spacetime-Windows-x86.exe" prefix_auto="1" extension_auto="0" />
+				<Option output="Spaceship-Physics-Windows-x86.exe" prefix_auto="1" extension_auto="0" />
 				<Option object_output=".objs/windows-x86" />
 				<Option type="0" />
 				<Option compiler="gcc" />
@@ -75,7 +75,7 @@
 			</Target>
 			<Target title="Release-Linux-x86_64">
 				<Option platforms="Unix;" />
-				<Option output="Spacetime-Linux-x86_64" prefix_auto="1" extension_auto="0" />
+				<Option output="Spaceship-Physics-Linux-x86_64" prefix_auto="1" extension_auto="0" />
 				<Option working_dir="" />
 				<Option object_output=".objs/linux-x86_64" />
 				<Option type="5" />
@@ -112,7 +112,7 @@
 			</Target>
 			<Target title="Release-Linux-x86">
 				<Option platforms="Unix;" />
-				<Option output="Spacetime-Linux-x86" prefix_auto="1" extension_auto="0" />
+				<Option output="Spaceship-Physics-Linux-x86" prefix_auto="1" extension_auto="0" />
 				<Option working_dir="" />
 				<Option object_output=".objs/linux-x86" />
 				<Option type="5" />
@@ -148,7 +148,7 @@
 			</Target>
 			<Target title="Release-OSX-x86_64">
 				<Option platforms="Mac;" />
-				<Option output="Spacetime-OSX-x86_64" prefix_auto="1" extension_auto="0" />
+				<Option output="Spaceship-Physics-OSX-x86_64" prefix_auto="1" extension_auto="0" />
 				<Option working_dir="" />
 				<Option object_output=".objs/osx-x86_64" />
 				<Option type="5" />
@@ -195,7 +195,7 @@
 			</Target>
 			<Target title="Debug-Windows-x86_64">
 				<Option platforms="Windows;" />
-				<Option output="Spacetime-Windows-Debug-x86_64.exe" prefix_auto="1" extension_auto="0" />
+				<Option output="Spaceship-Physics-Windows-Debug-x86_64.exe" prefix_auto="1" extension_auto="0" />
 				<Option object_output=".objs/windows-debug-x86_64" />
 				<Option type="0" />
 				<Option compiler="gcc" />
@@ -228,7 +228,7 @@
 			</Target>
 			<Target title="Debug-Linux-x86_64">
 				<Option platforms="Unix;" />
-				<Option output="Spacetime-Linux-Debug-x86_64" prefix_auto="1" extension_auto="0" />
+				<Option output="Spaceship-Physics-Linux-Debug-x86_64" prefix_auto="1" extension_auto="0" />
 				<Option working_dir="" />
 				<Option object_output=".objs/linux-debug-x86_64" />
 				<Option type="5" />

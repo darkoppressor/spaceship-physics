@@ -1,8 +1,8 @@
 <engine>
 	// Engine settings //
 	
-	name:spacetime
-	home_directory:spacetime
+	name:spaceship-physics
+	home_directory:spaceship-physics
 	developer:Kevin Wells
 	logical_screen_width:256
 	logical_screen_height:144

@@ -6,7 +6,7 @@ FindPath()
 }
 
 if [ "${CHEESIE_GAME_NAME}" = "" ]; then
-    CHEESIE_GAME_NAME="Spacetime"
+    CHEESIE_GAME_NAME="Spaceship-Physics"
 fi
 
 if [ "${CHEESIE_DATA_PATH}" = "" ]; then

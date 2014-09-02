@@ -17,6 +17,7 @@ C:/Development/c++/android/raknet
 # Add your application source files here...
 LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 ../../../../animation.cpp \
+../../../../background.cpp \
 ../../../../button.cpp \
 ../../../../button_events.cpp \
 ../../../../collision.cpp \
@@ -27,13 +28,15 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 ../../../../coords.cpp \
 ../../../../cursor.cpp \
 ../../../../dev_info.cpp \
+../../../../effect_transient.cpp \
 ../../../../engine_interface.cpp \
+../../../../engine_interface_game.cpp \
 ../../../../engine_interface_options.cpp \
 ../../../../file_io.cpp \
 ../../../../font.cpp \
 ../../../../game.cpp \
 ../../../../game_command.cpp \
-../../../../game_constant.cpp \
+../../../../game_constants.cpp \
 ../../../../game_input.cpp \
 ../../../../game_option.cpp \
 ../../../../game_window.cpp \
@@ -45,11 +48,22 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 ../../../../math.cpp \
 ../../../../message_log.cpp \
 ../../../../music.cpp \
+../../../../network.cpp \
+../../../../network_client.cpp \
+../../../../network_game.cpp \
+../../../../network_server.cpp \
+../../../../object.cpp \
 ../../../../pixels.cpp \
+../../../../projectile.cpp \
+../../../../projectile_type.cpp \
 ../../../../render.cpp \
 ../../../../rng.cpp \
 ../../../../rtt_data.cpp \
 ../../../../rtt_manager.cpp \
+../../../../screen_shake.cpp \
+../../../../server.cpp \
+../../../../ship.cpp \
+../../../../ship_type.cpp \
 ../../../../sorting.cpp \
 ../../../../sound.cpp \
 ../../../../sound_data.cpp \
@@ -62,6 +76,8 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 ../../../../touch_controller.cpp \
 ../../../../update.cpp \
 ../../../../vector.cpp \
+../../../../weapon.cpp \
+../../../../weapon_type.cpp \
 ../../../../window.cpp \
 ../../../../window_close_function.cpp \
 ../../../../window_scrolling_buttons.cpp \

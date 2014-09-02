@@ -3,7 +3,7 @@
      com.gamemaker.game
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="org.cheeseandbacon.spacetime"
+      package="org.cheeseandbacon.spaceshipphysics"
       android:versionCode="1"
       android:versionName="0.0.1"
       android:installLocation="auto">

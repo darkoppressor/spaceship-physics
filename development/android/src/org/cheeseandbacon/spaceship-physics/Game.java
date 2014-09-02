@@ -1,4 +1,4 @@
-package org.cheeseandbacon.spacetime;
+package org.cheeseandbacon.spaceshipphysics;
 
 import org.libsdl.app.SDLActivity;
 
