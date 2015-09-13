@@ -1,5 +1,6 @@
 # spaceship-physics
 A simple simulation of spaceships with physics
+http://cheeseandbacon.org/
 
 This is just a very simple simulation of spaceships with Newtonian physics.
 
